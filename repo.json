@@ -1,6 +1,9 @@
 {
   "meta": {
-    "name": "trxlezi",
-    "website": "https://github.com/trxlezi/tachimanga-repo"
-  }
+    "name": "Tachimanga Personal Extensions",
+    "shortName": "TACHI",
+    "website": "https://github.com/trxlezi/tachimanga-repo",
+    "signingKeyFingerprint": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1"
+  },
+  "index_v2": "https://raw.githubusercontent.com/trxlezi/tachimanga-repo/repo/index.pb"
 }

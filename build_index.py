@@ -13,6 +13,10 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parent
 OFFICIAL_URL = 'https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.pb'
+REPO_NAME = 'Tachimanga Personal Extensions'
+REPO_BADGE = 'TACHI'
+REPO_WEBSITE = 'https://github.com/trxlezi/tachimanga-repo'
+REPO_BASE_URL = 'https://raw.githubusercontent.com/trxlezi/tachimanga-repo/repo'
 
 
 def varint(data, pos):
@@ -148,6 +152,13 @@ def build_index(offline=False, jar_alias=False):
                             hasReadme=0, hasChangelog=0, sources=sources))
     if not entries:
         raise ValueError('No APKs to index')
+    # repo.json is mandatory for the legacy index.min.json path: the client derives
+    # its URL by replacing '/index.min.json' with '/repo.json' and fails the whole
+    # store if it is missing. index_v2 points modern clients at the protobuf index.
+    (ROOT / 'repo.json').write_text(json.dumps(dict(
+        meta=dict(name=REPO_NAME, shortName=REPO_BADGE, website=REPO_WEBSITE,
+                  signingKeyFingerprint=(ROOT / 'signing-certificate.sha256').read_text(encoding='utf-8').strip()),
+        index_v2=f'{REPO_BASE_URL}/index.pb'), indent=2) + chr(10), encoding='utf-8')
     output = ROOT / 'index.min.json'
     temporary = output.with_suffix('.tmp')
     temporary.write_text(json.dumps(entries, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
