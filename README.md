@@ -47,7 +47,7 @@ O certificado público e sua impressão SHA-256 estão em `signing-certificate.d
 
 ## Recompilar uma extensão
 
-Requisitos: Python 3, Git, JDK compatível com Gradle 9.7.1 (neste build, JDK 25), Android SDK Platform 37.0 e build-tools 37.0.0. Configure `JAVA_HOME` e `ANDROID_HOME`. No Windows, o script também procura o JDK em `C:/Program Files/Java` e o SDK no diretório padrão do usuário.
+Requisitos: Python 3 com `pyaxmlparser` (`python -m pip install pyaxmlparser`), Git, JDK compatível com Gradle 9.7.1 (neste build, JDK 25), Android SDK Platform 37.0 e build-tools 37.0.0. Configure `JAVA_HOME` e `ANDROID_HOME`. No Windows, o script também procura o JDK em `C:/Program Files/Java` e o SDK no diretório padrão do usuário.
 
 ```bash
 ./add-extension.sh es ragnascans
@@ -65,7 +65,8 @@ O script:
 2. Reutiliza a chave original e calcula uma versão superior às versões publicada localmente e oficial, incluindo a versão-base do tema.
 3. Compila o release e executa lint da extensão e de seu tema direto.
 4. Verifica o APK com aapt2, apksigner, dexdump e inspeção dos IDs de métodos do DEX.
-5. Copia APK, ícone e metadados, arquiva versões anteriores em `build/previous-apks`, atualiza o índice e exporta as alterações para o patch.
+5. Copia APK, ícone e metadados e arquiva versões anteriores em `build/previous-apks`.
+6. Gera o `.jar` da extensão (`build_jars.py`), o `index.min.json` com o `repo.json` (`build_index.py`) e o `index.pb` (`build_pb.py`), e exporta as alterações para o patch.
 
 O script **não inventa correções para APIs desconhecidas**, não atualiza o checkout upstream automaticamente e não faz commit/push. Um nome de diretório pode divergir do nome exibido no app. Para uma fonte nova que quebre: erro → localizar chamada no código → aplicar equivalente antigo → executar o script → revisar → commit/push.
 
@@ -84,19 +85,33 @@ python -m unittest discover -s tests -v
 
 `code` é o último componente da versão (`3` para `1.4.3`), não o versionCode Android codificado (`104003`). `versionId` vem da declaração da fonte, e não é incrementado ao corrigir uma extensão.
 
-Se o Tachimanga exigir a extensão de arquivo `.jar`:
+### JARs
+
+O Tachimanga roda em iOS e baixa o `jarUrl`, não o `apkUrl`. Um `.jar` é o APK com duas substituições: o `classes.dex` vira classes JVM (dex2jar) e o `AndroidManifest.xml` binário vira XML de texto. **Renomear o APK para `.jar` não funciona** — o cliente lê o manifesto como XML de texto e falha com `Content is not allowed in prolog`.
 
 ```powershell
-python build_index.py --jar-alias
+python build_jars.py
+python build_jars.py tachiyomi-es.ragnascans-v1.4.4.apk
 ```
 
-Essa opção cria cópias byte a byte dos APKs com nome `.jar` e muda o índice. **Não são os JARs JVM otimizados que o Keiyoushi também produz atualmente.** Não use `-PoptimizedExtensionJar=true` neste perfil: esse caminho upstream usa ProGuard.
+O script baixa o dex2jar para `tools/` na primeira execução e normaliza o `extensionLib`, que o AXML guarda como float e decodifica para `1.600000`. Não use `-PoptimizedExtensionJar=true` neste perfil: esse caminho upstream usa ProGuard.
+
+### index.pb
 
 ```powershell
-git add README.md index.min.json apk icon metadata verification patches
+python build_pb.py
+```
+
+`index.min.json` é o formato legado; o Tachimanga e o Mihon leem o `index.pb`. O `build_pb.py` codifica o protobuf à mão, sem runtime adicional, seguindo `index.proto` do upstream. Os dois índices precisam ser regerados juntos — o `add_extension.py` já faz isso.
+
+```powershell
+git add README.md index.min.json index.pb repo.json apk icon metadata verification patches
 git commit -m 'Update personal extensions'
 git push origin main
+git push -f origin main:repo
 ```
+
+A branch `repo` precisa acompanhar a `main`: as URLs dentro do `index.pb` apontam para ela.
 
 Os arquivos de código upstream ficam no checkout ignorado `extensions-source/`; suas mudanças ficam versionadas no patch. Downloads, cache oficial, logs e senhas não entram no repositório. Não use `git add -f` na pasta de chaves.
 

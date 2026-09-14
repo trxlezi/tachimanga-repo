@@ -116,7 +116,7 @@ def badging(apk):
                 name=extract(r"application-label:'([^']+)'")), output
 
 
-def build_index(offline=False, jar_alias=False):
+def build_index(offline=False):
     official = (json.loads((ROOT / 'metadata/official-index.json').read_text(encoding='utf-8'))['extensions']
                 if offline else fetch_official())
     entries, seen = [], set()
@@ -142,10 +142,8 @@ def build_index(offline=False, jar_alias=False):
                                 id=str(match['id']), baseUrl=source['baseUrl']))
         if len(sources) != len(upstream['sources']):
             raise ValueError(f'{pkg}: source count differs from official index')
-        if jar_alias:
-            shutil.copyfile(apk, apk.with_suffix('.jar'))
         entries.append(dict(name=meta['name'], pkg=pkg,
-                            apk=apk.with_suffix('.jar').name if jar_alias else apk.name,
+                            apk=apk.name,
                             lang=pkg.split('.extension.')[1].split('.')[0],
                             code=int(meta['version'].split('.')[-1]), version=meta['version'],
                             nsfw=1 if built.get('contentWarning') == 3 else 0,
@@ -170,6 +168,5 @@ def build_index(offline=False, jar_alias=False):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--offline', action='store_true', help='Use cached official metadata')
-    parser.add_argument('--jar-alias', action='store_true', help='Copy APK bytes to .jar aliases and index them')
     args = parser.parse_args()
-    build_index(args.offline, args.jar_alias)
+    build_index(args.offline)

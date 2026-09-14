@@ -11,6 +11,8 @@ import sys
 import zipfile
 
 from build_index import ROOT, badging, build_index, fetch_official
+from build_jars import main as build_jars
+from build_pb import build_pb
 from verify_apk import verify
 
 SOURCE = ROOT / 'extensions-source'
@@ -127,7 +129,16 @@ def main():
     run([gradle, '-Pextensions=' + module.replace('/', ':'), *tasks,
          '--console=plain', '--max-workers=4'], cwd=SOURCE)
     collect(module)
+    # index.min.json alone is not enough to serve a build: Tachimanga downloads the
+    # jar rather than the apk, and modern clients read index.pb rather than the
+    # legacy json. Regenerate both here so a new extension cannot be published with
+    # a missing jar and an index that still advertises the previous version.
+    stale = [apk.name for apk in sorted((ROOT / 'apk').glob('*.apk'))
+             if not apk.with_suffix('.jar').exists()]
+    if stale:
+        build_jars(stale)
     build_index(offline=True)
+    build_pb()
     patch = subprocess.check_output(['git', 'diff', '--binary', 'HEAD'], cwd=SOURCE)
     (ROOT / 'patches/tachimanga.patch').write_bytes(patch)
     print('Ready for review and git commit/push. APKs have not been tested on iOS.')
