@@ -13,3 +13,4 @@ audit/*
 !audit/selector-regression.txt
 *.log
 PROMPT-CLAUDE-CODE.md
+tools/
