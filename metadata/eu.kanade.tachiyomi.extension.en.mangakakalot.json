@@ -3,8 +3,8 @@
   "theme": "mangabox",
   "packageName": "eu.kanade.tachiyomi.extension.en.mangakakalot",
   "name": "Mangakakalot",
-  "versionCode": 106025,
-  "versionName": "1.6.25",
+  "versionCode": 106026,
+  "versionName": "1.6.26",
   "extensionLib": "1.6",
   "contentWarning": 2,
   "sources": [

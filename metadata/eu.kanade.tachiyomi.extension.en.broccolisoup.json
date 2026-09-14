@@ -3,8 +3,8 @@
   "theme": null,
   "packageName": "eu.kanade.tachiyomi.extension.en.broccolisoup",
   "name": "Broccoli Soup",
-  "versionCode": 104002,
-  "versionName": "1.4.2",
+  "versionCode": 104003,
+  "versionName": "1.4.3",
   "extensionLib": "1.4",
   "contentWarning": 1,
   "sources": [

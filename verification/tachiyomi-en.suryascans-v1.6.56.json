@@ -1,0 +1,23 @@
+{
+  "apk": "tachiyomi-en.suryascans-v1.6.56.apk",
+  "sha256": "b5690ac935895af22c9f3c384a2ee6794665883b0f39ba40cf1256ae5a2b402e",
+  "pkg": "eu.kanade.tachiyomi.extension.en.suryascans",
+  "version": "1.6.56",
+  "androidCode": 106056,
+  "minSdk": 21,
+  "name": "Tachiyomi: Genz Toons",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 193,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/suryascans/GenzToons;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

@@ -11,6 +11,28 @@ index 07592425..0b4f8ee7 100644
  
  private fun KSClassDeclaration.derivesFromHttpSource(): Boolean =
      getAllSuperTypes().any { it.declaration.qualifiedName?.asString() == HTTP_SOURCE }
+diff --git a/core/src/main/kotlin/keiyoushi/source/KeiSource.kt b/core/src/main/kotlin/keiyoushi/source/KeiSource.kt
+index d7df3a4f..0a985a4d 100644
+--- a/core/src/main/kotlin/keiyoushi/source/KeiSource.kt
++++ b/core/src/main/kotlin/keiyoushi/source/KeiSource.kt
+@@ -13,6 +13,7 @@ import eu.kanade.tachiyomi.source.model.SMangaUpdate
+ import eu.kanade.tachiyomi.source.online.HttpSource
+ import keiyoushi.network.CacheControlInterceptor
+ import keiyoushi.network.RateLimitInterceptor
++import keiyoushi.network.retryOnTooManyRequests
+ import keiyoushi.utils.applicationContext
+ import keiyoushi.utils.firstInstanceOrNull
+ import keiyoushi.utils.jsonInstance
+@@ -113,6 +114,9 @@ abstract class KeiSource : HttpSource() {
+                 }
+             }
+ 
++            // below the source's own interceptors, so a retry re-enters the rate limiter
++            retryOnTooManyRequests()
++
+             // last application interceptor
+             addInterceptor(CompressionInterceptor(Brotli, Gzip, Zstd))
+ 
 diff --git a/gradle/build-logic/src/main/kotlin/ExtensionPlugin.kt b/gradle/build-logic/src/main/kotlin/ExtensionPlugin.kt
 index 4a35ff2b..ba2456c9 100644
 --- a/gradle/build-logic/src/main/kotlin/ExtensionPlugin.kt
@@ -230,6 +252,32 @@ index d1cafce3..be0d86d3 100644
  
  /**
   * ===================================== COMMON CONFIGURATION ======================================
+diff --git a/src/en/artlapsa/build.gradle.kts b/src/en/artlapsa/build.gradle.kts
+index 555499f7..a0a482b3 100644
+--- a/src/en/artlapsa/build.gradle.kts
++++ b/src/en/artlapsa/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Art Lapsa"
+-    versionCode = 5
++    versionCode = 6
+     contentWarning = ContentWarning.MIXED
+     libVersion = "1.6"
+     theme = "keyoapp"
+diff --git a/src/en/asmotoon/build.gradle.kts b/src/en/asmotoon/build.gradle.kts
+index 7ddcd209..9c2f7deb 100644
+--- a/src/en/asmotoon/build.gradle.kts
++++ b/src/en/asmotoon/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Asmodeus Scans"
+-    versionCode = 3
++    versionCode = 4
+     contentWarning = ContentWarning.SAFE
+     libVersion = "1.6"
+     theme = "keyoapp"
 diff --git a/src/en/broccolisoup/build.gradle.kts b/src/en/broccolisoup/build.gradle.kts
 index 66e26147..e2c432e7 100644
 --- a/src/en/broccolisoup/build.gradle.kts
@@ -256,8 +304,86 @@ index 9afea8cd..a08eae30 100644
                  ?.text()?.trim()
  
              val bodyText = sectionElement.selectFirst("div.block-content")
+diff --git a/src/en/erisscans/build.gradle.kts b/src/en/erisscans/build.gradle.kts
+index 1f0ebf71..f7218bc4 100644
+--- a/src/en/erisscans/build.gradle.kts
++++ b/src/en/erisscans/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Eris Scans"
+-    versionCode = 0
++    versionCode = 1
+     contentWarning = ContentWarning.MIXED
+     libVersion = "1.6"
+     theme = "keyoapp"
+diff --git a/src/en/grimscans/build.gradle.kts b/src/en/grimscans/build.gradle.kts
+index 4e19286e..13ac8171 100644
+--- a/src/en/grimscans/build.gradle.kts
++++ b/src/en/grimscans/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Grim Scans"
+-    versionCode = 0
++    versionCode = 1
+     contentWarning = ContentWarning.SAFE
+     libVersion = "1.6"
+     theme = "keyoapp"
+diff --git a/src/en/kaizenscan/build.gradle.kts b/src/en/kaizenscan/build.gradle.kts
+index 084329ac..7a733897 100644
+--- a/src/en/kaizenscan/build.gradle.kts
++++ b/src/en/kaizenscan/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Kaizen Scan"
+-    versionCode = 0
++    versionCode = 1
+     contentWarning = ContentWarning.NSFW
+     libVersion = "1.6"
+     theme = "keyoapp"
+diff --git a/src/en/kewnscans/build.gradle.kts b/src/en/kewnscans/build.gradle.kts
+index 896090ae..fb40cf10 100644
+--- a/src/en/kewnscans/build.gradle.kts
++++ b/src/en/kewnscans/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Kewn Scans"
+-    versionCode = 1
++    versionCode = 2
+     contentWarning = ContentWarning.SAFE
+     libVersion = "1.6"
+     theme = "keyoapp"
+diff --git a/src/en/lunatoons/build.gradle.kts b/src/en/lunatoons/build.gradle.kts
+index a4f63c80..0c614ba6 100644
+--- a/src/en/lunatoons/build.gradle.kts
++++ b/src/en/lunatoons/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Luna Toons"
+-    versionCode = 0
++    versionCode = 1
+     contentWarning = ContentWarning.MIXED
+     libVersion = "1.6"
+     theme = "keyoapp"
+diff --git a/src/en/mangabat/build.gradle.kts b/src/en/mangabat/build.gradle.kts
+index 8ae7a47c..98ff6f9e 100644
+--- a/src/en/mangabat/build.gradle.kts
++++ b/src/en/mangabat/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Mangabat"
+-    versionCode = 8
++    versionCode = 9
+     contentWarning = ContentWarning.MIXED
+     libVersion = "1.6"
+     theme = "mangabox"
 diff --git a/src/en/mangago/build.gradle.kts b/src/en/mangago/build.gradle.kts
-index e92c68f1..9f61e3ae 100644
+index e92c68f1..090dcb2e 100644
 --- a/src/en/mangago/build.gradle.kts
 +++ b/src/en/mangago/build.gradle.kts
 @@ -6,7 +6,7 @@ plugins {
@@ -265,7 +391,7 @@ index e92c68f1..9f61e3ae 100644
  keiyoushi {
      name = "Mangago"
 -    versionCode = 40
-+    versionCode = 41
++    versionCode = 42
      contentWarning = ContentWarning.MIXED
      libVersion = "1.6"
  
@@ -321,8 +447,164 @@ index ebe59af7..b8848be9 100644
  private val KEY_LOCATION_REGEX = Regex("""str\.charAt\(\s*(\d+)\s*\)""")
  private val IMG_SRCS_REGEX = Regex("""var imgsrcs\s*=\s*['"]([a-zA-Z0-9+=/]+)['"]""")
  private val COLS_REGEX = Regex("""var\s*widthnum\s*=\s*heightnum\s*=\s*(\d+);""")
+diff --git a/src/en/mangakakalot/build.gradle.kts b/src/en/mangakakalot/build.gradle.kts
+index ec93f317..c38887b6 100644
+--- a/src/en/mangakakalot/build.gradle.kts
++++ b/src/en/mangakakalot/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Mangakakalot"
+-    versionCode = 9
++    versionCode = 10
+     contentWarning = ContentWarning.MIXED
+     libVersion = "1.6"
+     theme = "mangabox"
+diff --git a/src/en/manganelo/build.gradle.kts b/src/en/manganelo/build.gradle.kts
+index 5b134f96..c6a36548 100644
+--- a/src/en/manganelo/build.gradle.kts
++++ b/src/en/manganelo/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Manganato"
+-    versionCode = 7
++    versionCode = 8
+     contentWarning = ContentWarning.MIXED
+     libVersion = "1.6"
+     theme = "mangabox"
+diff --git a/src/en/meitoon/build.gradle.kts b/src/en/meitoon/build.gradle.kts
+index bbd346ae..2678f92e 100644
+--- a/src/en/meitoon/build.gradle.kts
++++ b/src/en/meitoon/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "MeiToon"
+-    versionCode = 0
++    versionCode = 1
+     contentWarning = ContentWarning.SAFE
+     libVersion = "1.6"
+     theme = "keyoapp"
+diff --git a/src/en/mistscans/build.gradle.kts b/src/en/mistscans/build.gradle.kts
+index 2f1a489e..85541e97 100644
+--- a/src/en/mistscans/build.gradle.kts
++++ b/src/en/mistscans/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Mist Scans"
+-    versionCode = 1
++    versionCode = 2
+     contentWarning = ContentWarning.SAFE
+     libVersion = "1.6"
+     theme = "keyoapp"
+diff --git a/src/en/nyanukafe/build.gradle.kts b/src/en/nyanukafe/build.gradle.kts
+index ac016f2f..516ff6aa 100644
+--- a/src/en/nyanukafe/build.gradle.kts
++++ b/src/en/nyanukafe/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Nyanu Kafe"
+-    versionCode = 1
++    versionCode = 2
+     contentWarning = ContentWarning.SAFE
+     libVersion = "1.6"
+     theme = "keyoapp"
+diff --git a/src/en/nyrascans/build.gradle.kts b/src/en/nyrascans/build.gradle.kts
+index 64d90fd8..7a1f27ab 100644
+--- a/src/en/nyrascans/build.gradle.kts
++++ b/src/en/nyrascans/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Nyra Scans"
+-    versionCode = 0
++    versionCode = 1
+     contentWarning = ContentWarning.MIXED
+     libVersion = "1.6"
+     theme = "keyoapp"
+diff --git a/src/en/paradisescans/build.gradle.kts b/src/en/paradisescans/build.gradle.kts
+index 6b9a4f69..c3d3a9f1 100644
+--- a/src/en/paradisescans/build.gradle.kts
++++ b/src/en/paradisescans/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Paradise Scans"
+-    versionCode = 1
++    versionCode = 2
+     contentWarning = ContentWarning.NSFW
+     libVersion = "1.6"
+     theme = "keyoapp"
+diff --git a/src/en/ritharscans/build.gradle.kts b/src/en/ritharscans/build.gradle.kts
+index ca0a3599..1d513c38 100644
+--- a/src/en/ritharscans/build.gradle.kts
++++ b/src/en/ritharscans/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "RitharScans"
+-    versionCode = 4
++    versionCode = 5
+     contentWarning = ContentWarning.SAFE
+     libVersion = "1.6"
+     theme = "keyoapp"
+diff --git a/src/en/sirenscans/build.gradle.kts b/src/en/sirenscans/build.gradle.kts
+index 4c0eec67..56aed63b 100644
+--- a/src/en/sirenscans/build.gradle.kts
++++ b/src/en/sirenscans/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Siren Scans"
+-    versionCode = 0
++    versionCode = 1
+     contentWarning = ContentWarning.SAFE
+     libVersion = "1.6"
+     theme = "keyoapp"
+diff --git a/src/en/suryascans/build.gradle.kts b/src/en/suryascans/build.gradle.kts
+index 8c7180a8..5d75a33a 100644
+--- a/src/en/suryascans/build.gradle.kts
++++ b/src/en/suryascans/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Genz Toons"
+-    versionCode = 33
++    versionCode = 34
+     contentWarning = ContentWarning.SAFE
+     libVersion = "1.6"
+     theme = "keyoapp"
+diff --git a/src/en/timelesstoons/build.gradle.kts b/src/en/timelesstoons/build.gradle.kts
+index fca1dc77..a0af3bdb 100644
+--- a/src/en/timelesstoons/build.gradle.kts
++++ b/src/en/timelesstoons/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "TimelessToons"
+-    versionCode = 1
++    versionCode = 2
+     contentWarning = ContentWarning.SAFE
+     libVersion = "1.6"
+     theme = "keyoapp"
+diff --git a/src/en/writerscans/build.gradle.kts b/src/en/writerscans/build.gradle.kts
+index 96301b3e..69ad4c73 100644
+--- a/src/en/writerscans/build.gradle.kts
++++ b/src/en/writerscans/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Writer Scans"
+-    versionCode = 0
++    versionCode = 1
+     contentWarning = ContentWarning.SAFE
+     libVersion = "1.6"
+     theme = "keyoapp"
 diff --git a/src/es/ragnascans/build.gradle.kts b/src/es/ragnascans/build.gradle.kts
-index 533eeb74..225517f9 100644
+index 533eeb74..8a0b7e58 100644
 --- a/src/es/ragnascans/build.gradle.kts
 +++ b/src/es/ragnascans/build.gradle.kts
 @@ -6,7 +6,7 @@ plugins {
@@ -330,22 +612,23 @@ index 533eeb74..225517f9 100644
  keiyoushi {
      name = "Ragna Scans"
 -    versionCode = 2
-+    versionCode = 4
++    versionCode = 5
      contentWarning = ContentWarning.SAFE
      libVersion = "1.4"
  
 diff --git a/src/es/ragnascans/src/eu/kanade/tachiyomi/extension/es/ragnascans/RagnaScans.kt b/src/es/ragnascans/src/eu/kanade/tachiyomi/extension/es/ragnascans/RagnaScans.kt
-index cbc4ab10..9b51aa93 100644
+index cbc4ab10..ce66a969 100644
 --- a/src/es/ragnascans/src/eu/kanade/tachiyomi/extension/es/ragnascans/RagnaScans.kt
 +++ b/src/es/ragnascans/src/eu/kanade/tachiyomi/extension/es/ragnascans/RagnaScans.kt
-@@ -17,23 +17,44 @@ import keiyoushi.utils.firstInstanceOrNull
+@@ -12,6 +12,7 @@ import eu.kanade.tachiyomi.source.model.SManga
+ import eu.kanade.tachiyomi.source.online.HttpSource
+ import keiyoushi.annotation.Source
+ import keiyoushi.network.rateLimit
++import keiyoushi.network.retryOnTooManyRequests
+ import keiyoushi.utils.asJsoup
+ import keiyoushi.utils.firstInstanceOrNull
  import keiyoushi.utils.tryParse
- import okhttp3.HttpUrl.Companion.toHttpUrl
- import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-+import okhttp3.Interceptor
- import okhttp3.Request
- import okhttp3.Response
- import rx.Observable
+@@ -23,15 +24,21 @@ import rx.Observable
  import java.text.SimpleDateFormat
  import java.util.Locale
  import java.util.TimeZone
@@ -364,28 +647,12 @@ index cbc4ab10..9b51aa93 100644
 +    // opened entry bursts four hits. Space them out and recover from the 429 when it still happens.
      override val client = network.client.newBuilder()
 -        .rateLimit(1)
-+        .addInterceptor(Interceptor(::retryOnTooManyRequests))
++        .retryOnTooManyRequests()
 +        .rateLimit(permits = 1, period = 1.seconds, interval = 600.milliseconds)
          .build()
  
-+    private fun retryOnTooManyRequests(chain: Interceptor.Chain): Response {
-+        var response = chain.proceed(chain.request())
-+        var attempt = 0
-+        while (response.code == HTTP_TOO_MANY_REQUESTS && attempt < MAX_RETRIES) {
-+            if (chain.call().isCanceled()) return response
-+            val retryAfter = response.header("Retry-After")?.toLongOrNull()?.seconds
-+            response.close()
-+            Thread.sleep((retryAfter ?: (RETRY_BACKOFF * (attempt + 1))).inWholeMilliseconds)
-+            attempt++
-+            response = chain.proceed(chain.request())
-+        }
-+        return response
-+    }
-+
      private val dateFormat by lazy {
-         SimpleDateFormat("dd MMMM, yyyy", Locale("es")).apply {
-             timeZone = TimeZone.getTimeZone("UTC")
-@@ -115,8 +136,8 @@ abstract class RagnaScans : HttpSource() {
+@@ -115,8 +122,8 @@ abstract class RagnaScans : HttpSource() {
              thumbnail_url = document.selectFirst(".cover-wrapper img")?.absUrl("src")
  
              val infoWrap = document.select(".flex.flex-wrap.items-center.gap-x-3")
@@ -396,14 +663,3 @@ index cbc4ab10..9b51aa93 100644
  
              description = document.selectFirst("#sinopsisWrapper p")?.text()
  
-@@ -197,4 +218,10 @@ abstract class RagnaScans : HttpSource() {
-         Filter.Separator(),
-         SortFilter(),
-     )
-+
-+    companion object {
-+        private const val HTTP_TOO_MANY_REQUESTS = 429
-+        private const val MAX_RETRIES = 3
-+        private val RETRY_BACKOFF = 2.seconds
-+    }
- }

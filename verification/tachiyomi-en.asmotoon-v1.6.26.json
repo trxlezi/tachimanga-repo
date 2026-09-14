@@ -1,0 +1,26 @@
+{
+  "apk": "tachiyomi-en.asmotoon-v1.6.26.apk",
+  "sha256": "87d17712a2169aa16734214cb9577999c4c24b9d1152072c8134a9a8385d2a65",
+  "pkg": "eu.kanade.tachiyomi.extension.en.asmotoon",
+  "version": "1.6.26",
+  "androidCode": 106026,
+  "minSdk": 21,
+  "name": "Tachiyomi: Asmodeus Scans",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 196,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/asmotoon/Asmotoon$$ExternalSyntheticLambda0;",
+    "Leu/kanade/tachiyomi/extension/en/asmotoon/Asmotoon$$ExternalSyntheticLambda1;",
+    "Leu/kanade/tachiyomi/extension/en/asmotoon/Asmotoon$Companion;",
+    "Leu/kanade/tachiyomi/extension/en/asmotoon/Asmotoon;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

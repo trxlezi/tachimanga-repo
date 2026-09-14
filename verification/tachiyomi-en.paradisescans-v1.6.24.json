@@ -1,0 +1,23 @@
+{
+  "apk": "tachiyomi-en.paradisescans-v1.6.24.apk",
+  "sha256": "508e49ac98e046fe3a4537bde32f6f3bab8ad2d23f01c82d5aa38704081e6ee1",
+  "pkg": "eu.kanade.tachiyomi.extension.en.paradisescans",
+  "version": "1.6.24",
+  "androidCode": 106024,
+  "minSdk": 21,
+  "name": "Tachiyomi: Paradise Scans",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 193,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/paradisescans/ParadiseScans;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

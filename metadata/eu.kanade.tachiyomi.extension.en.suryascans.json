@@ -3,8 +3,8 @@
   "theme": "keyoapp",
   "packageName": "eu.kanade.tachiyomi.extension.en.suryascans",
   "name": "Genz Toons",
-  "versionCode": 106055,
-  "versionName": "1.6.55",
+  "versionCode": 106056,
+  "versionName": "1.6.56",
   "extensionLib": "1.6",
   "contentWarning": 1,
   "sources": [

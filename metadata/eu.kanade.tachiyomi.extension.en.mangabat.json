@@ -3,8 +3,8 @@
   "theme": "mangabox",
   "packageName": "eu.kanade.tachiyomi.extension.en.mangabat",
   "name": "Mangabat",
-  "versionCode": 106024,
-  "versionName": "1.6.24",
+  "versionCode": 106025,
+  "versionName": "1.6.25",
   "extensionLib": "1.6",
   "contentWarning": 2,
   "sources": [

@@ -1,0 +1,32 @@
+{
+  "apk": "tachiyomi-es.ragnascans-v1.4.5.apk",
+  "sha256": "bffcca722bacf13b4ae159871efccaf8da86c685a302d10e8208f76774fda5ea",
+  "pkg": "eu.kanade.tachiyomi.extension.es.ragnascans",
+  "version": "1.4.5",
+  "androidCode": 104005,
+  "minSdk": 21,
+  "name": "Tachiyomi: Ragna Scans",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 178,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/es/ragnascans/CheckBoxFilter;",
+    "Leu/kanade/tachiyomi/extension/es/ragnascans/GenreFilter;",
+    "Leu/kanade/tachiyomi/extension/es/ragnascans/RagnaScans$$ExternalSyntheticLambda0;",
+    "Leu/kanade/tachiyomi/extension/es/ragnascans/RagnaScans$$ExternalSyntheticLambda1;",
+    "Leu/kanade/tachiyomi/extension/es/ragnascans/RagnaScans$$ExternalSyntheticLambda2;",
+    "Leu/kanade/tachiyomi/extension/es/ragnascans/RagnaScans$$ExternalSyntheticLambda3;",
+    "Leu/kanade/tachiyomi/extension/es/ragnascans/RagnaScans;",
+    "Leu/kanade/tachiyomi/extension/es/ragnascans/SortFilter;",
+    "Leu/kanade/tachiyomi/extension/es/ragnascans/StatusFilter;",
+    "Leu/kanade/tachiyomi/extension/es/ragnascans/TypeFilter;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

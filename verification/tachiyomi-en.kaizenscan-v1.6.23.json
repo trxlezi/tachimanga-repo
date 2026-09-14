@@ -1,0 +1,23 @@
+{
+  "apk": "tachiyomi-en.kaizenscan-v1.6.23.apk",
+  "sha256": "6b426b731e0086515e464bda356f1fd189ed66183f0bc92efd456a1e582f0c7d",
+  "pkg": "eu.kanade.tachiyomi.extension.en.kaizenscan",
+  "version": "1.6.23",
+  "androidCode": 106023,
+  "minSdk": 21,
+  "name": "Tachiyomi: Kaizen Scan",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 193,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/kaizenscan/KaizenScan;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

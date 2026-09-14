@@ -1,0 +1,23 @@
+{
+  "apk": "tachiyomi-en.kewnscans-v1.6.24.apk",
+  "sha256": "1cd0ac6f3132c221786047e322a4dd2ae8530760553f41eca95e41591c9cb09d",
+  "pkg": "eu.kanade.tachiyomi.extension.en.kewnscans",
+  "version": "1.6.24",
+  "androidCode": 106024,
+  "minSdk": 21,
+  "name": "Tachiyomi: Kewn Scans",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 193,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/kewnscans/KewnScans;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}
