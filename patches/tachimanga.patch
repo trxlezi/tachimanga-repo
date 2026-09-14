@@ -663,3 +663,52 @@ index cbc4ab10..ce66a969 100644
  
              description = document.selectFirst("#sinopsisWrapper p")?.text()
  
+diff --git a/src/pt/tiamanhwa/build.gradle.kts b/src/pt/tiamanhwa/build.gradle.kts
+index 0d2a714d..405b159f 100644
+--- a/src/pt/tiamanhwa/build.gradle.kts
++++ b/src/pt/tiamanhwa/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Tia Manhwa"
+-    versionCode = 3
++    versionCode = 4
+     contentWarning = ContentWarning.NSFW
+     libVersion = "1.4"
+     theme = "madaralegacy"
+diff --git a/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt b/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt
+index 30bb6640..f0e3cd86 100644
+--- a/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt
++++ b/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt
+@@ -50,25 +50,13 @@ abstract class TiaManhwa : Madara() {
+     override fun searchMangaNextPageSelector() = "a.next, a.page-numbers.next"
+ 
+     // Popular
+-    override fun popularMangaRequest(page: Int) = GET(baseUrl, headers)
++    // Keyed off a homepage slider whose id is a WordPress widget instance: #manga-slider-2
++    // became -3 and -4 once the site added widgets, so the list silently came back empty.
++    // Madara's own views listing paginates by URL and does not depend on widget numbering.
++    // Its load-more path is not an option here either: admin-ajax.php answers 403.
++    override fun popularMangaRequest(page: Int): Request = GET("$baseUrl/$mangaSubString/${searchPage(page)}?m_orderby=views", headers)
+ 
+-    override fun popularMangaSelector() = "#manga-slider-2 .slider__item"
+-
+-    override fun popularMangaFromElement(element: Element): SManga {
+-        val anchor = element.selectFirst("a")!!
+-        return SManga.create().apply {
+-            title = element.selectFirst("h4 a")?.text()
+-                ?: anchor.attr("href")
+-                    .substringAfter("/manhwa/")
+-                    .replace("-", " ")
+-                    .replaceFirstChar { it.uppercase() }
+-
+-            setUrlWithoutDomain(anchor.attr("href"))
+-            thumbnail_url = element.selectFirst("img")?.absUrl("src")
+-        }
+-    }
+-
+-    override fun popularMangaNextPageSelector(): String? = null
++    override fun popularMangaNextPageSelector(): String? = "a.nextpostslink"
+ 
+     // Latest
+     // Override to fetch truly updated titles instead of the homepage slider used by default Madara.

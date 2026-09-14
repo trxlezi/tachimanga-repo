@@ -142,9 +142,13 @@ def build_index(offline=False):
                                 id=str(match['id']), baseUrl=source['baseUrl']))
         if len(sources) != len(upstream['sources']):
             raise ValueError(f'{pkg}: source count differs from official index')
+        # The package segment only approximates the language: pt/tiamanhwa is really
+        # pt-BR, and the client groups the extension list by this field. Derive it from
+        # the sources the way the client does, and fall back when they disagree.
+        languages = {source['lang'] for source in sources}
         entries.append(dict(name=meta['name'], pkg=pkg,
                             apk=apk.name,
-                            lang=pkg.split('.extension.')[1].split('.')[0],
+                            lang=languages.pop() if len(languages) == 1 else 'all',
                             code=int(meta['version'].split('.')[-1]), version=meta['version'],
                             nsfw=1 if built.get('contentWarning') == 3 else 0,
                             hasReadme=0, hasChangelog=0, sources=sources))
