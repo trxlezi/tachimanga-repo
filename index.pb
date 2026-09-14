@@ -1,5 +1,6 @@
 
-Tachimanga Personal ExtensionsªÐT
+Tachimanga Personal ExtensionsTACHI@1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+*https://github.com/trxlezi/tachimanga-repoªÐT
 È
 Tachiyomi: Art Lapsa)eu.kanade.tachiyomi.extension.en.artlapsaÀ
 dhttps://raw.githubusercontent.com/trxlezi/tachimanga-repo/repo/apk/tachiyomi-en.artlapsa-v1.6.27.apkqhttps://raw.githubusercontent.com/trxlezi/tachimanga-repo/repo/icon/eu.kanade.tachiyomi.extension.en.artlapsa.pngªdhttps://raw.githubusercontent.com/trxlezi/tachimanga-repo/repo/apk/tachiyomi-en.artlapsa-v1.6.27.jar"1.6(«¼21.6.278B/å¹Á½¶—È˜
