@@ -231,7 +231,7 @@ index d1cafce3..be0d86d3 100644
  /**
   * ===================================== COMMON CONFIGURATION ======================================
 diff --git a/src/en/broccolisoup/build.gradle.kts b/src/en/broccolisoup/build.gradle.kts
-index 66e26147..9422f75a 100644
+index 66e26147..e2c432e7 100644
 --- a/src/en/broccolisoup/build.gradle.kts
 +++ b/src/en/broccolisoup/build.gradle.kts
 @@ -6,7 +6,7 @@ plugins {
@@ -239,7 +239,7 @@ index 66e26147..9422f75a 100644
  keiyoushi {
      name = "Broccoli Soup"
 -    versionCode = 1
-+    versionCode = 2
++    versionCode = 3
      contentWarning = ContentWarning.SAFE
      libVersion = "1.4"
  
@@ -322,7 +322,7 @@ index ebe59af7..b8848be9 100644
  private val IMG_SRCS_REGEX = Regex("""var imgsrcs\s*=\s*['"]([a-zA-Z0-9+=/]+)['"]""")
  private val COLS_REGEX = Regex("""var\s*widthnum\s*=\s*heightnum\s*=\s*(\d+);""")
 diff --git a/src/es/ragnascans/build.gradle.kts b/src/es/ragnascans/build.gradle.kts
-index 533eeb74..9b68080f 100644
+index 533eeb74..225517f9 100644
 --- a/src/es/ragnascans/build.gradle.kts
 +++ b/src/es/ragnascans/build.gradle.kts
 @@ -6,7 +6,7 @@ plugins {
@@ -330,15 +330,62 @@ index 533eeb74..9b68080f 100644
  keiyoushi {
      name = "Ragna Scans"
 -    versionCode = 2
-+    versionCode = 3
++    versionCode = 4
      contentWarning = ContentWarning.SAFE
      libVersion = "1.4"
  
 diff --git a/src/es/ragnascans/src/eu/kanade/tachiyomi/extension/es/ragnascans/RagnaScans.kt b/src/es/ragnascans/src/eu/kanade/tachiyomi/extension/es/ragnascans/RagnaScans.kt
-index cbc4ab10..e6025864 100644
+index cbc4ab10..9b51aa93 100644
 --- a/src/es/ragnascans/src/eu/kanade/tachiyomi/extension/es/ragnascans/RagnaScans.kt
 +++ b/src/es/ragnascans/src/eu/kanade/tachiyomi/extension/es/ragnascans/RagnaScans.kt
-@@ -115,8 +115,8 @@ abstract class RagnaScans : HttpSource() {
+@@ -17,23 +17,44 @@ import keiyoushi.utils.firstInstanceOrNull
+ import keiyoushi.utils.tryParse
+ import okhttp3.HttpUrl.Companion.toHttpUrl
+ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
++import okhttp3.Interceptor
+ import okhttp3.Request
+ import okhttp3.Response
+ import rx.Observable
+ import java.text.SimpleDateFormat
+ import java.util.Locale
+ import java.util.TimeZone
++import kotlin.time.Duration.Companion.milliseconds
++import kotlin.time.Duration.Companion.seconds
+ 
+ @Source
+ abstract class RagnaScans : HttpSource() {
+ 
+     override val supportsLatest = true
+ 
+-    // Limit to 1 request per second to prevent HTTP 429 on parallel manga update fetches
++    // Every directory link is a manga.php?id= URL that 301s to the canonical /manga/<slug>,
++    // so one call costs two hits on the server. The rate limiter tags a request once and lets
++    // the redirect through unlimited, and the app loads details and chapters in parallel, so an
++    // opened entry bursts four hits. Space them out and recover from the 429 when it still happens.
+     override val client = network.client.newBuilder()
+-        .rateLimit(1)
++        .addInterceptor(Interceptor(::retryOnTooManyRequests))
++        .rateLimit(permits = 1, period = 1.seconds, interval = 600.milliseconds)
+         .build()
+ 
++    private fun retryOnTooManyRequests(chain: Interceptor.Chain): Response {
++        var response = chain.proceed(chain.request())
++        var attempt = 0
++        while (response.code == HTTP_TOO_MANY_REQUESTS && attempt < MAX_RETRIES) {
++            if (chain.call().isCanceled()) return response
++            val retryAfter = response.header("Retry-After")?.toLongOrNull()?.seconds
++            response.close()
++            Thread.sleep((retryAfter ?: (RETRY_BACKOFF * (attempt + 1))).inWholeMilliseconds)
++            attempt++
++            response = chain.proceed(chain.request())
++        }
++        return response
++    }
++
+     private val dateFormat by lazy {
+         SimpleDateFormat("dd MMMM, yyyy", Locale("es")).apply {
+             timeZone = TimeZone.getTimeZone("UTC")
+@@ -115,8 +136,8 @@ abstract class RagnaScans : HttpSource() {
              thumbnail_url = document.selectFirst(".cover-wrapper img")?.absUrl("src")
  
              val infoWrap = document.select(".flex.flex-wrap.items-center.gap-x-3")
@@ -349,3 +396,14 @@ index cbc4ab10..e6025864 100644
  
              description = document.selectFirst("#sinopsisWrapper p")?.text()
  
+@@ -197,4 +218,10 @@ abstract class RagnaScans : HttpSource() {
+         Filter.Separator(),
+         SortFilter(),
+     )
++
++    companion object {
++        private const val HTTP_TOO_MANY_REQUESTS = 429
++        private const val MAX_RETRIES = 3
++        private val RETRY_BACKOFF = 2.seconds
++    }
+ }

@@ -3,8 +3,8 @@
   "theme": null,
   "packageName": "eu.kanade.tachiyomi.extension.es.ragnascans",
   "name": "Ragna Scans",
-  "versionCode": 104003,
-  "versionName": "1.4.3",
+  "versionCode": 104004,
+  "versionName": "1.4.4",
   "extensionLib": "1.4",
   "contentWarning": 1,
   "sources": [
