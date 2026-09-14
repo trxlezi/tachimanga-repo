@@ -1,0 +1,19 @@
+{
+  "module": "es.ikigaimangas",
+  "theme": null,
+  "packageName": "eu.kanade.tachiyomi.extension.es.ikigaimangas",
+  "name": "Ikigai Mangas",
+  "versionCode": 104036,
+  "versionName": "1.4.36",
+  "extensionLib": "1.4",
+  "contentWarning": 2,
+  "sources": [
+    {
+      "id": 7749406396573482811,
+      "versionId": 2,
+      "name": "Ikigai Mangas",
+      "lang": "es",
+      "baseUrl": "https://visorikigai.gettocaboca.com"
+    }
+  ]
+}

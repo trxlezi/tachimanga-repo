@@ -1,0 +1,30 @@
+{
+  "apk": "tachiyomi-es.catharsisworld-v1.4.67.apk",
+  "sha256": "4612cc13d67a373f3bb8b8fbee33d5d815bec603cc9b0ac8897b0a5536dbfef5",
+  "pkg": "eu.kanade.tachiyomi.extension.es.catharsisworld",
+  "version": "1.4.67",
+  "androidCode": 104067,
+  "minSdk": 21,
+  "name": "Tachiyomi: Catharsis World",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 215,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/es/catharsisworld/CatharsisWorld$$ExternalSyntheticLambda0;",
+    "Leu/kanade/tachiyomi/extension/es/catharsisworld/CatharsisWorld$$ExternalSyntheticLambda1;",
+    "Leu/kanade/tachiyomi/extension/es/catharsisworld/CatharsisWorld$$ExternalSyntheticLambda2;",
+    "Leu/kanade/tachiyomi/extension/es/catharsisworld/CatharsisWorld$$ExternalSyntheticLambda3;",
+    "Leu/kanade/tachiyomi/extension/es/catharsisworld/CatharsisWorld$Companion;",
+    "Leu/kanade/tachiyomi/extension/es/catharsisworld/CatharsisWorld$client_delegate$lambda$0$$inlined$-addInterceptor$1;",
+    "Leu/kanade/tachiyomi/extension/es/catharsisworld/CatharsisWorld$special$$inlined$getPreferencesLazy$default$1;",
+    "Leu/kanade/tachiyomi/extension/es/catharsisworld/CatharsisWorld;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

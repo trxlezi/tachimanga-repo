@@ -1,0 +1,22 @@
+{
+  "apk": "tachiyomi-en.bakkin-v1.6.8.apk",
+  "sha256": "5bb1a32b19d3b95b17d952246f3190241889d7000a44c02dc4146f79836572d0",
+  "pkg": "eu.kanade.tachiyomi.extension.en.bakkin",
+  "version": "1.6.8",
+  "androidCode": 106008,
+  "minSdk": 21,
+  "name": "Tachiyomi: Bakkin",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 189,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/bakkin/Bakkin;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

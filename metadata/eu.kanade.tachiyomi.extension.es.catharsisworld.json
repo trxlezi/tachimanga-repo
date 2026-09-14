@@ -1,0 +1,19 @@
+{
+  "module": "es.catharsisworld",
+  "theme": "madaralegacy",
+  "packageName": "eu.kanade.tachiyomi.extension.es.catharsisworld",
+  "name": "Catharsis World",
+  "versionCode": 104067,
+  "versionName": "1.4.67",
+  "extensionLib": "1.4",
+  "contentWarning": 2,
+  "sources": [
+    {
+      "id": 2856082375563763469,
+      "versionId": 2,
+      "name": "Catharsis World",
+      "lang": "es",
+      "baseUrl": "https://catharsisworld.dig-it.info"
+    }
+  ]
+}

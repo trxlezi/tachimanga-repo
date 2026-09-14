@@ -1,0 +1,19 @@
+{
+  "module": "en.bakkin",
+  "theme": "bakkin",
+  "packageName": "eu.kanade.tachiyomi.extension.en.bakkin",
+  "name": "Bakkin",
+  "versionCode": 106008,
+  "versionName": "1.6.8",
+  "extensionLib": "1.6",
+  "contentWarning": 1,
+  "sources": [
+    {
+      "id": 2005076600562293471,
+      "versionId": 1,
+      "name": "Bakkin",
+      "lang": "en",
+      "baseUrl": "https://bakkin.moe/reader/"
+    }
+  ]
+}
