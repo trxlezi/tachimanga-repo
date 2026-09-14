@@ -134,7 +134,8 @@ def build_index(offline=False, jar_alias=False):
                           and s['name'] == source['name'] and s['lang'] == source['lang']), None)
             if match is None:
                 raise ValueError(f'{pkg}: built source identity differs from official index')
-            sources.append(dict(match, baseUrl=source['baseUrl'], versionId=source.get('versionId', 1)))
+            sources.append(dict(name=match['name'], lang=match['lang'],
+                                id=str(match['id']), baseUrl=source['baseUrl']))
         if len(sources) != len(upstream['sources']):
             raise ValueError(f'{pkg}: source count differs from official index')
         if jar_alias:
@@ -142,12 +143,14 @@ def build_index(offline=False, jar_alias=False):
         entries.append(dict(name=meta['name'], pkg=pkg,
                             apk=apk.with_suffix('.jar').name if jar_alias else apk.name,
                             lang=pkg.split('.extension.')[1].split('.')[0],
-                            code=int(meta['version'].split('.')[-1]), version=meta['version'], sources=sources))
+                            code=int(meta['version'].split('.')[-1]), version=meta['version'],
+                            nsfw=1 if built.get('contentWarning') == 3 else 0,
+                            hasReadme=0, hasChangelog=0, sources=sources))
     if not entries:
         raise ValueError('No APKs to index')
     output = ROOT / 'index.min.json'
     temporary = output.with_suffix('.tmp')
-    temporary.write_text(json.dumps(entries, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
+    temporary.write_text(json.dumps(entries, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     temporary.replace(output)
     print(f'{output.name}: {len(entries)} extensions; all source IDs verified')
     return entries
