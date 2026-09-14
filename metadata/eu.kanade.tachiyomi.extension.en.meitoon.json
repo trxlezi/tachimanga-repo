@@ -1,0 +1,19 @@
+{
+  "module": "en.meitoon",
+  "theme": "keyoapp",
+  "packageName": "eu.kanade.tachiyomi.extension.en.meitoon",
+  "name": "MeiToon",
+  "versionCode": 106022,
+  "versionName": "1.6.22",
+  "extensionLib": "1.6",
+  "contentWarning": 1,
+  "sources": [
+    {
+      "id": 3314074618469377356,
+      "versionId": 1,
+      "name": "MeiToon",
+      "lang": "en",
+      "baseUrl": "https://meitoon.org"
+    }
+  ]
+}

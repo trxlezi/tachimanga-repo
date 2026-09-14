@@ -1,0 +1,23 @@
+{
+  "apk": "tachiyomi-en.writerscans-v1.6.22.apk",
+  "sha256": "45c00c094c1e0d95eb2493bd9596f3c9009363f2de4747c25f2f6963c413acbb",
+  "pkg": "eu.kanade.tachiyomi.extension.en.writerscans",
+  "version": "1.6.22",
+  "androidCode": 106022,
+  "minSdk": 21,
+  "name": "Tachiyomi: Writer Scans",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 190,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/writerscans/WriterScans;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

@@ -1,0 +1,24 @@
+{
+  "apk": "tachiyomi-en.mangabat-v1.6.24.apk",
+  "sha256": "8a1906fae6a5c934edf1519782d26b7953376c98056caf1b6e42df176cfe4ec6",
+  "pkg": "eu.kanade.tachiyomi.extension.en.mangabat",
+  "version": "1.6.24",
+  "androidCode": 106024,
+  "minSdk": 21,
+  "name": "Tachiyomi: Mangabat",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 216,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/mangabat/Mangabat$Companion;",
+    "Leu/kanade/tachiyomi/extension/en/mangabat/Mangabat;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

@@ -1,0 +1,19 @@
+{
+  "module": "en.artlapsa",
+  "theme": "keyoapp",
+  "packageName": "eu.kanade.tachiyomi.extension.en.artlapsa",
+  "name": "Art Lapsa",
+  "versionCode": 106027,
+  "versionName": "1.6.27",
+  "extensionLib": "1.6",
+  "contentWarning": 2,
+  "sources": [
+    {
+      "id": 734404203508686053,
+      "versionId": 1,
+      "name": "Art Lapsa",
+      "lang": "en",
+      "baseUrl": "https://artlapsa.com"
+    }
+  ]
+}

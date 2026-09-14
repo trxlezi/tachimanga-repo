@@ -1,0 +1,19 @@
+{
+  "module": "en.kaizenscan",
+  "theme": "keyoapp",
+  "packageName": "eu.kanade.tachiyomi.extension.en.kaizenscan",
+  "name": "Kaizen Scan",
+  "versionCode": 106022,
+  "versionName": "1.6.22",
+  "extensionLib": "1.6",
+  "contentWarning": 3,
+  "sources": [
+    {
+      "id": 1145415569668934781,
+      "versionId": 1,
+      "name": "Kaizen Scan",
+      "lang": "en",
+      "baseUrl": "https://kaizenscan.com"
+    }
+  ]
+}

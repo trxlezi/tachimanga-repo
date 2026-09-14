@@ -1,0 +1,23 @@
+{
+  "apk": "tachiyomi-en.meitoon-v1.6.22.apk",
+  "sha256": "6e46895d8f73f8643cf3027febdcd91ae43dd34d0d8c04a352f3d1be3cbe7ee6",
+  "pkg": "eu.kanade.tachiyomi.extension.en.meitoon",
+  "version": "1.6.22",
+  "androidCode": 106022,
+  "minSdk": 21,
+  "name": "Tachiyomi: MeiToon",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 190,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/meitoon/MeiToon;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

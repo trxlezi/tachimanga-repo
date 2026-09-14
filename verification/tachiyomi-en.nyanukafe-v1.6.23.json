@@ -1,0 +1,23 @@
+{
+  "apk": "tachiyomi-en.nyanukafe-v1.6.23.apk",
+  "sha256": "eb7e7b34cd86d4c2bc6658934c931b2fb1fe363808c2bcbc74d3b7550cb4f1e5",
+  "pkg": "eu.kanade.tachiyomi.extension.en.nyanukafe",
+  "version": "1.6.23",
+  "androidCode": 106023,
+  "minSdk": 21,
+  "name": "Tachiyomi: Nyanu Kafe",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 190,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/nyanukafe/NyanuKafe;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

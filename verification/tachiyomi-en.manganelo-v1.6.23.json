@@ -1,0 +1,24 @@
+{
+  "apk": "tachiyomi-en.manganelo-v1.6.23.apk",
+  "sha256": "8f74f5e560257dfbae7d6cfee2e79c41d4d3839ea89a08a6e6871e8a3a1153ba",
+  "pkg": "eu.kanade.tachiyomi.extension.en.manganelo",
+  "version": "1.6.23",
+  "androidCode": 106023,
+  "minSdk": 21,
+  "name": "Tachiyomi: Manganato",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 217,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/manganelo/Manganato$Companion;",
+    "Leu/kanade/tachiyomi/extension/en/manganelo/Manganato;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

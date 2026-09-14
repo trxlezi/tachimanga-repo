@@ -1,0 +1,7 @@
+PASS: original queries on 1.22.2 = patched queries on 1.14.3 and 1.15.1
+0:[h4, h1, h3, h2]
+1:[r1, r2, r3]
+2:[free, paid, free2]
+3:[free, free2]
+4:[m1, m2]
+Ragna: multiple roots and absent matches OK

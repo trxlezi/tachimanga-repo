@@ -1,0 +1,19 @@
+{
+  "module": "en.nyrascans",
+  "theme": "keyoapp",
+  "packageName": "eu.kanade.tachiyomi.extension.en.nyrascans",
+  "name": "Nyra Scans",
+  "versionCode": 106022,
+  "versionName": "1.6.22",
+  "extensionLib": "1.6",
+  "contentWarning": 2,
+  "sources": [
+    {
+      "id": 1917870670428613627,
+      "versionId": 1,
+      "name": "Nyra Scans",
+      "lang": "en",
+      "baseUrl": "https://nyrascans.com"
+    }
+  ]
+}

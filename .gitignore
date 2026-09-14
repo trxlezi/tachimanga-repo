@@ -1,0 +1,15 @@
+keystore/
+extensions-source/
+.gradle/
+build/
+__pycache__/
+*.pyc
+metadata/official-index.json
+audit/*
+!audit/RELATORIO.md
+!audit/JsoupProbe.java
+!audit/probe-*.txt
+!audit/SelectorRegression.java
+!audit/selector-regression.txt
+*.log
+PROMPT-CLAUDE-CODE.md

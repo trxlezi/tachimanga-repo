@@ -1,0 +1,23 @@
+{
+  "apk": "tachiyomi-en.erisscans-v1.6.22.apk",
+  "sha256": "39ea208bb44088c36dadadddae3d04062c04d6692dae9a3a14ad578e60d5612f",
+  "pkg": "eu.kanade.tachiyomi.extension.en.erisscans",
+  "version": "1.6.22",
+  "androidCode": 106022,
+  "minSdk": 21,
+  "name": "Tachiyomi: Eris Scans",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 190,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/erisscans/ErisScans;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

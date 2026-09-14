@@ -1,0 +1,23 @@
+{
+  "apk": "tachiyomi-en.sirenscans-v1.6.22.apk",
+  "sha256": "df37105fae2a984c6efa80b284970f713874078f6995aae3f6f90d941e1bdee8",
+  "pkg": "eu.kanade.tachiyomi.extension.en.sirenscans",
+  "version": "1.6.22",
+  "androidCode": 106022,
+  "minSdk": 21,
+  "name": "Tachiyomi: Siren Scans",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 190,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/sirenscans/SirenScans;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

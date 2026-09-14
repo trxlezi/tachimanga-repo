@@ -1,0 +1,19 @@
+{
+  "module": "en.writerscans",
+  "theme": "keyoapp",
+  "packageName": "eu.kanade.tachiyomi.extension.en.writerscans",
+  "name": "Writer Scans",
+  "versionCode": 106022,
+  "versionName": "1.6.22",
+  "extensionLib": "1.6",
+  "contentWarning": 1,
+  "sources": [
+    {
+      "id": 561830040001881975,
+      "versionId": 1,
+      "name": "Writer Scans",
+      "lang": "en",
+      "baseUrl": "https://writerscans.com"
+    }
+  ]
+}

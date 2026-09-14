@@ -1,0 +1,19 @@
+{
+  "module": "es.ragnascans",
+  "theme": null,
+  "packageName": "eu.kanade.tachiyomi.extension.es.ragnascans",
+  "name": "Ragna Scans",
+  "versionCode": 104003,
+  "versionName": "1.4.3",
+  "extensionLib": "1.4",
+  "contentWarning": 1,
+  "sources": [
+    {
+      "id": 6003330990591348231,
+      "versionId": 1,
+      "name": "Ragna Scans",
+      "lang": "es",
+      "baseUrl": "https://lector.ragnascan.xyz"
+    }
+  ]
+}

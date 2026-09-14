@@ -1,0 +1,23 @@
+{
+  "module": "en.mangakakalot",
+  "theme": "mangabox",
+  "packageName": "eu.kanade.tachiyomi.extension.en.mangakakalot",
+  "name": "Mangakakalot",
+  "versionCode": 106025,
+  "versionName": "1.6.25",
+  "extensionLib": "1.6",
+  "contentWarning": 2,
+  "sources": [
+    {
+      "id": 2528986671771677900,
+      "versionId": 1,
+      "name": "Mangakakalot",
+      "lang": "en",
+      "baseUrl": "https://www.mangakakalot.gg",
+      "mirrorUrls": [
+        "https://www.mangakakalot.gg",
+        "https://www.mangakakalove.com"
+      ]
+    }
+  ]
+}

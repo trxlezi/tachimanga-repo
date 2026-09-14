@@ -1,0 +1,24 @@
+{
+  "module": "en.manganelo",
+  "theme": "mangabox",
+  "packageName": "eu.kanade.tachiyomi.extension.en.manganelo",
+  "name": "Manganato",
+  "versionCode": 106023,
+  "versionName": "1.6.23",
+  "extensionLib": "1.6",
+  "contentWarning": 2,
+  "sources": [
+    {
+      "id": 1024627298672457456,
+      "versionId": 1,
+      "name": "Manganato",
+      "lang": "en",
+      "baseUrl": "https://www.natomanga.com",
+      "mirrorUrls": [
+        "https://www.natomanga.com",
+        "https://www.nelomanga.net",
+        "https://www.manganato.gg"
+      ]
+    }
+  ]
+}

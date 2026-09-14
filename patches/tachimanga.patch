@@ -1,0 +1,351 @@
+diff --git a/compiler/src/main/kotlin/keiyoushi/processor/SourceProcessor.kt b/compiler/src/main/kotlin/keiyoushi/processor/SourceProcessor.kt
+index 07592425..0b4f8ee7 100644
+--- a/compiler/src/main/kotlin/keiyoushi/processor/SourceProcessor.kt
++++ b/compiler/src/main/kotlin/keiyoushi/processor/SourceProcessor.kt
+@@ -70,7 +70,7 @@ private const val KEI_SOURCE = "keiyoushi.source.KeiSource"
+ // Fixed entry point FQN referenced by the generated manifest; independent of the module
+ // directory, the @Source class's package, and the pkgName override.
+ private const val GENERATED_CLASS_PACKAGE = "keiyoushi.source"
+-private const val GENERATED_CLASS_NAME = "Generated"
++private const val GENERATED_CLASS_NAME = "TachimangaEntryPoint"
+ 
+ private fun KSClassDeclaration.derivesFromHttpSource(): Boolean =
+     getAllSuperTypes().any { it.declaration.qualifiedName?.asString() == HTTP_SOURCE }
+diff --git a/gradle/build-logic/src/main/kotlin/ExtensionPlugin.kt b/gradle/build-logic/src/main/kotlin/ExtensionPlugin.kt
+index 4a35ff2b..ba2456c9 100644
+--- a/gradle/build-logic/src/main/kotlin/ExtensionPlugin.kt
++++ b/gradle/build-logic/src/main/kotlin/ExtensionPlugin.kt
+@@ -48,6 +48,10 @@ class ExtensionPlugin : Plugin<Project> {
+             alias(kei.plugins.spotless)
+         }
+ 
++        val personalSigning = java.util.Properties().apply {
++            rootProject.file("../keystore/keystore.properties").inputStream().use { load(it) }
++        }
++
+         val keiyoushi = extensions.create<KeiyoushiExtension>("keiyoushi")
+         val dirSuffix = "${project.parent?.name}.${project.name}"
+         val pkgName = keiyoushi.pkgName.orElse(dirSuffix)
+@@ -75,21 +79,22 @@ class ExtensionPlugin : Plugin<Project> {
+ 
+             signingConfigs {
+                 create("release") {
+-                    storeFile = rootProject.file("signingkey.jks")
+-                    storePassword = providers.environmentVariable("KEY_STORE_PASSWORD").orNull
+-                    keyAlias = providers.environmentVariable("ALIAS").orNull
+-                    keyPassword = providers.environmentVariable("KEY_PASSWORD").orNull
++                    storeFile = rootProject.file("../keystore/${personalSigning.getProperty("storeFile")}")
++                    storePassword = personalSigning.getProperty("storePassword")
++                    keyAlias = personalSigning.getProperty("keyAlias")
++                    keyPassword = personalSigning.getProperty("keyPassword")
+                 }
+             }
+ 
+             buildTypes {
+                 named("release") {
+-                    signingConfig = if (rootProject.file("signingkey.jks").exists()) {
++                    signingConfig = if (rootProject.file("../keystore/${personalSigning.getProperty("storeFile")}").exists()) {
+                         signingConfigs.getByName("release")
+                     } else {
+                         signingConfigs.getByName("debug")
+                     }
+-                    isMinifyEnabled = true
++                    isMinifyEnabled = false
++                    isShrinkResources = false
+                     proguardFiles(rootProject.file("common/proguard-rules.pro"))
+                     @Suppress("UnstableApiUsage")
+                     vcsInfo.include = false
+@@ -174,7 +179,7 @@ class ExtensionPlugin : Plugin<Project> {
+         }
+ 
+         val signingConfig = extensions.getByType(ApplicationExtension::class.java).signingConfigs
+-            .getByName(if (rootProject.file("signingkey.jks").exists()) "release" else "debug")
++            .getByName(if (rootProject.file("../keystore/${personalSigning.getProperty("storeFile")}").exists()) "release" else "debug")
+ 
+         androidComponents {
+             val bootClasspath = sdkComponents.bootClasspath
+@@ -202,7 +207,7 @@ class ExtensionPlugin : Plugin<Project> {
+                     output.outputFileName.set(filenameProvider.map { "$it.apk" })
+                 }
+ 
+-                if (variant.buildType == "release") {
++                if (variant.buildType == "release" && providers.gradleProperty("optimizedExtensionJar").orNull == "true") {
+                     val externalLibs = providedClasspath.incoming.artifactView {
+                         attributes.attribute(ARTIFACT_TYPE_ATTRIBUTE, "android-classes-jar")
+                     }.files
+@@ -275,9 +280,10 @@ class ExtensionPlugin : Plugin<Project> {
+             }
+ 
+             val packageName = "eu.kanade.tachiyomi.extension.${pkgName.get()}"
+-            val sourceInfos = resolvedSources.map { source ->
++            val sourceInfos = resolvedSources.mapIndexed { index, source ->
+                 SourceMetadata(
+                     id = source.id,
++                    versionId = specs[index].versionId.orElse(1).get(),
+                     name = source.name,
+                     lang = source.lang,
+                     baseUrl = source.baseUrl.defaultUrl,
+diff --git a/gradle/build-logic/src/main/kotlin/io/github/keiyoushi/gradle/internal/MetadataModels.kt b/gradle/build-logic/src/main/kotlin/io/github/keiyoushi/gradle/internal/MetadataModels.kt
+index 09f45411..a6b388b2 100644
+--- a/gradle/build-logic/src/main/kotlin/io/github/keiyoushi/gradle/internal/MetadataModels.kt
++++ b/gradle/build-logic/src/main/kotlin/io/github/keiyoushi/gradle/internal/MetadataModels.kt
+@@ -21,6 +21,7 @@ internal data class ExtensionMetadata(
+ @Serializable
+ internal data class SourceMetadata(
+     val id: Long,
++    val versionId: Int,
+     val name: String,
+     val lang: String,
+     val baseUrl: String,
+diff --git a/gradle/build-logic/src/main/kotlin/io/github/keiyoushi/gradle/tasks/GenerateManifestTask.kt b/gradle/build-logic/src/main/kotlin/io/github/keiyoushi/gradle/tasks/GenerateManifestTask.kt
+index 28eed58a..c2a30746 100644
+--- a/gradle/build-logic/src/main/kotlin/io/github/keiyoushi/gradle/tasks/GenerateManifestTask.kt
++++ b/gradle/build-logic/src/main/kotlin/io/github/keiyoushi/gradle/tasks/GenerateManifestTask.kt
+@@ -12,7 +12,7 @@ import org.gradle.api.tasks.OutputFile
+ import org.gradle.api.tasks.TaskAction
+ 
+ // Must match GENERATED_CLASS_PACKAGE/NAME in compiler/src/main/kotlin/keiyoushi/processor/SourceProcessor.kt
+-internal const val GENERATED_EXTENSION_CLASS_FQN = "keiyoushi.source.Generated"
++internal const val GENERATED_EXTENSION_CLASS_FQN = "keiyoushi.source.TachimangaEntryPoint"
+ 
+ @CacheableTask
+ abstract class GenerateManifestTask : DefaultTask() {
+diff --git a/gradle/kei.versions.toml b/gradle/kei.versions.toml
+index 1e05ca70..149d39b9 100644
+--- a/gradle/kei.versions.toml
++++ b/gradle/kei.versions.toml
+@@ -1,6 +1,6 @@
+ [versions]
+ # Used in [/gradle/build-logic/src/main/kotlin/AndroidBasePlugin.kt]
+-android-sdk-min = "26"
++android-sdk-min = "21"
+ android-sdk-compile = "37"
+ android-sdk-target = "37"
+ java = "11"
+diff --git a/lib-multisrc/keyoapp/build.gradle.kts b/lib-multisrc/keyoapp/build.gradle.kts
+index 97e74033..56eeff81 100644
+--- a/lib-multisrc/keyoapp/build.gradle.kts
++++ b/lib-multisrc/keyoapp/build.gradle.kts
+@@ -7,7 +7,7 @@ dependencies {
+ }
+ 
+ keiyoushi {
+-    baseVersionCode = 21
++    baseVersionCode = 22
+     libVersion = "1.6"
+     deeplink {
+         path("/series/..*")
+diff --git a/lib-multisrc/keyoapp/src/eu/kanade/tachiyomi/multisrc/keyoapp/Keyoapp.kt b/lib-multisrc/keyoapp/src/eu/kanade/tachiyomi/multisrc/keyoapp/Keyoapp.kt
+index fb8c4c7a..2eb9924e 100644
+--- a/lib-multisrc/keyoapp/src/eu/kanade/tachiyomi/multisrc/keyoapp/Keyoapp.kt
++++ b/lib-multisrc/keyoapp/src/eu/kanade/tachiyomi/multisrc/keyoapp/Keyoapp.kt
+@@ -17,7 +17,7 @@ import keiyoushi.utils.asJsoup
+ import keiyoushi.utils.getPreferences
+ import keiyoushi.utils.parseAs
+ import keiyoushi.utils.toJsonElement
+-import keiyoushi.utils.tryParseDate
++import keiyoushi.utils.tryParse
+ import kotlinx.serialization.json.JsonElement
+ import okhttp3.HttpUrl
+ import okhttp3.HttpUrl.Companion.toHttpUrl
+@@ -25,7 +25,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+ import okhttp3.Response
+ import org.jsoup.nodes.Document
+ import org.jsoup.nodes.Element
+-import java.time.format.DateTimeFormatter
++import java.text.SimpleDateFormat
+ import java.util.Calendar
+ import java.util.Locale
+ 
+@@ -35,7 +35,7 @@ abstract class Keyoapp :
+ 
+     protected val preferences = getPreferences()
+ 
+-    open val dateFormat = DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.ENGLISH)
++    open val dateFormat = SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH).apply { isLenient = false }
+ 
+     protected val intl = Intl(
+         language = lang,
+@@ -208,9 +208,9 @@ abstract class Keyoapp :
+ 
+     open fun chapterListSelector(): String {
+         if (!showPaidChapters) {
+-            return "#chapters > :is(a, div):not(:has(.text-sm span:matches(Upcoming))):not(:has($paidChapterSelector))"
++            return "#chapters > a:not(:has(.text-sm span:matches(Upcoming))):not(:has($paidChapterSelector)), #chapters > div:not(:has(.text-sm span:matches(Upcoming))):not(:has($paidChapterSelector))"
+         }
+-        return "#chapters > :is(a, div):not(:has(.text-sm span:matches(Upcoming)))"
++        return "#chapters > a:not(:has(.text-sm span:matches(Upcoming))), #chapters > div:not(:has(.text-sm span:matches(Upcoming)))"
+     }
+ 
+     open fun chapterListParse(document: Document): List<SChapter> = document.select(chapterListSelector()).map { chapterFromElement(it) }
+@@ -345,7 +345,7 @@ abstract class Keyoapp :
+     open fun String.parseDate(): Long = if (this.contains("ago")) {
+         this.parseRelativeDate()
+     } else {
+-        dateFormat.tryParseDate(this)
++        synchronized(dateFormat) { dateFormat.tryParse(this) }
+     }
+ 
+     private fun String.parseRelativeDate(): Long {
+diff --git a/lib-multisrc/mangabox/build.gradle.kts b/lib-multisrc/mangabox/build.gradle.kts
+index 490156e6..db298aa2 100644
+--- a/lib-multisrc/mangabox/build.gradle.kts
++++ b/lib-multisrc/mangabox/build.gradle.kts
+@@ -3,6 +3,6 @@ plugins {
+ }
+ 
+ keiyoushi {
+-    baseVersionCode = 15
++    baseVersionCode = 16
+     libVersion = "1.6"
+ }
+diff --git a/lib-multisrc/mangabox/src/eu/kanade/tachiyomi/multisrc/mangabox/MangaBox.kt b/lib-multisrc/mangabox/src/eu/kanade/tachiyomi/multisrc/mangabox/MangaBox.kt
+index 14f50a40..83c286ec 100644
+--- a/lib-multisrc/mangabox/src/eu/kanade/tachiyomi/multisrc/mangabox/MangaBox.kt
++++ b/lib-multisrc/mangabox/src/eu/kanade/tachiyomi/multisrc/mangabox/MangaBox.kt
+@@ -215,7 +215,7 @@ abstract class MangaBox :
+ 
+     // ============================== Popular ==============================
+ 
+-    open fun popularMangaSelector() = ":is(div.truyen-list > div.list-truyen-item-wrap, div.comic-list > .list-comic-item-wrap):has(a[data-id])"
++    open fun popularMangaSelector() = "div.truyen-list > div.list-truyen-item-wrap:has(a[data-id]), div.comic-list > .list-comic-item-wrap:has(a[data-id])"
+ 
+     open fun parsePopularManga(response: Response): MangasPage {
+         val document = response.asJsoup()
+diff --git a/settings.gradle.kts b/settings.gradle.kts
+index d1cafce3..be0d86d3 100644
+--- a/settings.gradle.kts
++++ b/settings.gradle.kts
+@@ -33,8 +33,11 @@ rootProject.name = "Keiyoushi"
+ /**
+  * Add or remove modules to load as needed for local development here.
+  */
+-loadAllIndividualExtensions()
+-// loadIndividualExtension("all", "mangadex")
++val selectedExtensions = providers.gradleProperty("extensions").orElse("es:ragnascans").get()
++selectedExtensions.split(",").forEach {
++    val (lang, name) = it.split(":")
++    loadIndividualExtension(lang, name)
++}
+ 
+ /**
+  * ===================================== COMMON CONFIGURATION ======================================
+diff --git a/src/en/broccolisoup/build.gradle.kts b/src/en/broccolisoup/build.gradle.kts
+index 66e26147..9422f75a 100644
+--- a/src/en/broccolisoup/build.gradle.kts
++++ b/src/en/broccolisoup/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Broccoli Soup"
+-    versionCode = 1
++    versionCode = 2
+     contentWarning = ContentWarning.SAFE
+     libVersion = "1.4"
+ 
+diff --git a/src/en/broccolisoup/src/eu/kanade/tachiyomi/extension/en/broccolisoup/BroccoliSoup.kt b/src/en/broccolisoup/src/eu/kanade/tachiyomi/extension/en/broccolisoup/BroccoliSoup.kt
+index 9afea8cd..a08eae30 100644
+--- a/src/en/broccolisoup/src/eu/kanade/tachiyomi/extension/en/broccolisoup/BroccoliSoup.kt
++++ b/src/en/broccolisoup/src/eu/kanade/tachiyomi/extension/en/broccolisoup/BroccoliSoup.kt
+@@ -127,7 +127,7 @@ abstract class BroccoliSoup : HttpSource() {
+     private fun characterSummaryPageListParse(response: Response): List<Page> = response.asJsoup().select("section.static-block:has(figure, .block-content)")
+         .flatMap { sectionElement ->
+             val headerText = sectionElement
+-                .selectFirst("section > :is(h1, h2, h3, h4)")
++                .selectFirst("section > h1, section > h2, section > h3, section > h4")
+                 ?.text()?.trim()
+ 
+             val bodyText = sectionElement.selectFirst("div.block-content")
+diff --git a/src/en/mangago/build.gradle.kts b/src/en/mangago/build.gradle.kts
+index e92c68f1..9f61e3ae 100644
+--- a/src/en/mangago/build.gradle.kts
++++ b/src/en/mangago/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Mangago"
+-    versionCode = 40
++    versionCode = 41
+     contentWarning = ContentWarning.MIXED
+     libVersion = "1.6"
+ 
+diff --git a/src/en/mangago/src/eu/kanade/tachiyomi/extension/en/mangago/Mangago.kt b/src/en/mangago/src/eu/kanade/tachiyomi/extension/en/mangago/Mangago.kt
+index ebe59af7..b8848be9 100644
+--- a/src/en/mangago/src/eu/kanade/tachiyomi/extension/en/mangago/Mangago.kt
++++ b/src/en/mangago/src/eu/kanade/tachiyomi/extension/en/mangago/Mangago.kt
+@@ -29,7 +29,7 @@ import keiyoushi.utils.getPreferences
+ import keiyoushi.utils.parseAs
+ import keiyoushi.utils.string
+ import keiyoushi.utils.toJsonElement
+-import keiyoushi.utils.tryParseDate
++import keiyoushi.utils.tryParse
+ import kotlinx.coroutines.sync.Mutex
+ import kotlinx.coroutines.sync.withLock
+ import kotlinx.serialization.json.JsonElement
+@@ -48,9 +48,9 @@ import org.jsoup.nodes.Document
+ import org.jsoup.nodes.Element
+ import java.io.InputStream
+ import java.security.MessageDigest
+-import java.time.ZoneOffset
+-import java.time.format.DateTimeFormatter
++import java.text.SimpleDateFormat
+ import java.util.Locale
++import java.util.TimeZone
+ import javax.crypto.Cipher
+ import javax.crypto.spec.IvParameterSpec
+ import javax.crypto.spec.SecretKeySpec
+@@ -202,12 +202,12 @@ abstract class Mangago :
+         }
+     }
+ 
+-    private fun parseChapterList(document: Document): List<SChapter> = document.select(":is(table#raws_table, table#chapter_table) > tbody > tr, table.uk-table > tbody > tr")
++    private fun parseChapterList(document: Document): List<SChapter> = document.select("table#raws_table > tbody > tr, table#chapter_table > tbody > tr, table.uk-table > tbody > tr")
+         .mapNotNull { element ->
+             val link = element.selectFirst("a.chico") ?: return@mapNotNull null
+             if (link.attr("href").contains("/raw/") && removeRaws) return@mapNotNull null
+             val name = link.text().takeIf { it.isNotEmpty() } ?: return@mapNotNull null
+-            val date = DATE_FORMAT.tryParseDate(element.select("td:last-child").text(), ZoneOffset.UTC)
++            val date = synchronized(DATE_FORMAT) { DATE_FORMAT.tryParse(element.select("td:last-child").text()) }
+             val scanlator = element.selectFirst("td.no a, td.uk-table-shrink a")
+                 ?.text()
+                 ?.takeIf { it.isNotEmpty() }
+@@ -535,7 +535,10 @@ private const val REMOVE_RAW_PREF = "pref_remove_raw"
+ private const val REMOVE_TITLE_VERSION_PREF = "REMOVE_TITLE_VERSION"
+ private const val ALT_NAME_PREFIX = "Alternative Names:"
+ 
+-private val DATE_FORMAT = DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.ENGLISH)
++private val DATE_FORMAT = SimpleDateFormat("MMM d, yyyy", Locale.ENGLISH).apply {
++    timeZone = TimeZone.getTimeZone("UTC")
++    isLenient = false
++}
+ private val KEY_LOCATION_REGEX = Regex("""str\.charAt\(\s*(\d+)\s*\)""")
+ private val IMG_SRCS_REGEX = Regex("""var imgsrcs\s*=\s*['"]([a-zA-Z0-9+=/]+)['"]""")
+ private val COLS_REGEX = Regex("""var\s*widthnum\s*=\s*heightnum\s*=\s*(\d+);""")
+diff --git a/src/es/ragnascans/build.gradle.kts b/src/es/ragnascans/build.gradle.kts
+index 533eeb74..9b68080f 100644
+--- a/src/es/ragnascans/build.gradle.kts
++++ b/src/es/ragnascans/build.gradle.kts
+@@ -6,7 +6,7 @@ plugins {
+ 
+ keiyoushi {
+     name = "Ragna Scans"
+-    versionCode = 2
++    versionCode = 3
+     contentWarning = ContentWarning.SAFE
+     libVersion = "1.4"
+ 
+diff --git a/src/es/ragnascans/src/eu/kanade/tachiyomi/extension/es/ragnascans/RagnaScans.kt b/src/es/ragnascans/src/eu/kanade/tachiyomi/extension/es/ragnascans/RagnaScans.kt
+index cbc4ab10..e6025864 100644
+--- a/src/es/ragnascans/src/eu/kanade/tachiyomi/extension/es/ragnascans/RagnaScans.kt
++++ b/src/es/ragnascans/src/eu/kanade/tachiyomi/extension/es/ragnascans/RagnaScans.kt
+@@ -115,8 +115,8 @@ abstract class RagnaScans : HttpSource() {
+             thumbnail_url = document.selectFirst(".cover-wrapper img")?.absUrl("src")
+ 
+             val infoWrap = document.select(".flex.flex-wrap.items-center.gap-x-3")
+-            author = infoWrap.selectFirst("span:contains(Autor:)")?.text()?.substringAfter("Autor:")?.trim()
+-            artist = infoWrap.selectFirst("span:contains(Ilustrador:)")?.text()?.substringAfter("Ilustrador:")?.trim()
++            author = infoWrap.select("span:contains(Autor:)").firstOrNull()?.text()?.substringAfter("Autor:")?.trim()
++            artist = infoWrap.select("span:contains(Ilustrador:)").firstOrNull()?.text()?.substringAfter("Ilustrador:")?.trim()
+ 
+             description = document.selectFirst("#sinopsisWrapper p")?.text()
+ 

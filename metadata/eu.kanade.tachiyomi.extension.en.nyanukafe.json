@@ -1,0 +1,19 @@
+{
+  "module": "en.nyanukafe",
+  "theme": "keyoapp",
+  "packageName": "eu.kanade.tachiyomi.extension.en.nyanukafe",
+  "name": "Nyanu Kafe",
+  "versionCode": 106023,
+  "versionName": "1.6.23",
+  "extensionLib": "1.6",
+  "contentWarning": 1,
+  "sources": [
+    {
+      "id": 3025454996745441538,
+      "versionId": 1,
+      "name": "Nyanu Kafe",
+      "lang": "en",
+      "baseUrl": "https://nyanukafe.com"
+    }
+  ]
+}

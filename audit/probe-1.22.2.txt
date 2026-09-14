@@ -1,0 +1,6 @@
+Elements.selectFirst: PRESENT
+OK section > :is(h1, h2, h3, h4)
+OK :is(table#raws_table, table#chapter_table) > tbody > tr, table.uk-table > tbody > tr
+OK #chapters > :is(a, div):not(:has(.text-sm span:matches(Upcoming)))
+OK :is(div.truyen-list > div.list-truyen-item-wrap, div.comic-list > .list-comic-item-wrap):has(a[data-id])
+Backport: Autor: A

@@ -1,0 +1,6 @@
+Elements.selectFirst: ABSENT
+SelectorParseException section > :is(h1, h2, h3, h4)
+SelectorParseException :is(table#raws_table, table#chapter_table) > tbody > tr, table.uk-table > tbody > tr
+SelectorParseException #chapters > :is(a, div):not(:has(.text-sm span:matches(Upcoming)))
+SelectorParseException :is(div.truyen-list > div.list-truyen-item-wrap, div.comic-list > .list-comic-item-wrap):has(a[data-id])
+Backport: Autor: A

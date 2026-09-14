@@ -1,0 +1,19 @@
+{
+  "module": "en.mangago",
+  "theme": null,
+  "packageName": "eu.kanade.tachiyomi.extension.en.mangago",
+  "name": "Mangago",
+  "versionCode": 106041,
+  "versionName": "1.6.41",
+  "extensionLib": "1.6",
+  "contentWarning": 2,
+  "sources": [
+    {
+      "id": 2470059397662084186,
+      "versionId": 1,
+      "name": "Mangago",
+      "lang": "en",
+      "baseUrl": "https://www.mangago.me"
+    }
+  ]
+}

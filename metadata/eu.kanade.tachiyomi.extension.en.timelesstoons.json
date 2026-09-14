@@ -1,0 +1,19 @@
+{
+  "module": "en.timelesstoons",
+  "theme": "keyoapp",
+  "packageName": "eu.kanade.tachiyomi.extension.en.timelesstoons",
+  "name": "TimelessToons",
+  "versionCode": 106023,
+  "versionName": "1.6.23",
+  "extensionLib": "1.6",
+  "contentWarning": 1,
+  "sources": [
+    {
+      "id": 9063123408669132087,
+      "versionId": 1,
+      "name": "TimelessToons",
+      "lang": "en",
+      "baseUrl": "https://timelesstoons.org"
+    }
+  ]
+}

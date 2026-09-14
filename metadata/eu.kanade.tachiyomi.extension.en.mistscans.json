@@ -1,0 +1,19 @@
+{
+  "module": "en.mistscans",
+  "theme": "keyoapp",
+  "packageName": "eu.kanade.tachiyomi.extension.en.mistscans",
+  "name": "Mist Scans",
+  "versionCode": 106023,
+  "versionName": "1.6.23",
+  "extensionLib": "1.6",
+  "contentWarning": 1,
+  "sources": [
+    {
+      "id": 80073424419623517,
+      "versionId": 1,
+      "name": "Mist Scans",
+      "lang": "en",
+      "baseUrl": "https://mistscans.com"
+    }
+  ]
+}

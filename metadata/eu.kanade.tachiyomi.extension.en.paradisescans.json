@@ -1,0 +1,19 @@
+{
+  "module": "en.paradisescans",
+  "theme": "keyoapp",
+  "packageName": "eu.kanade.tachiyomi.extension.en.paradisescans",
+  "name": "Paradise Scans",
+  "versionCode": 106023,
+  "versionName": "1.6.23",
+  "extensionLib": "1.6",
+  "contentWarning": 3,
+  "sources": [
+    {
+      "id": 5928300995303689257,
+      "versionId": 1,
+      "name": "Paradise Scans",
+      "lang": "en",
+      "baseUrl": "https://paradisescans.com"
+    }
+  ]
+}

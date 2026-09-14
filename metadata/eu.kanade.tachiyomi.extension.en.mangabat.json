@@ -1,0 +1,19 @@
+{
+  "module": "en.mangabat",
+  "theme": "mangabox",
+  "packageName": "eu.kanade.tachiyomi.extension.en.mangabat",
+  "name": "Mangabat",
+  "versionCode": 106024,
+  "versionName": "1.6.24",
+  "extensionLib": "1.6",
+  "contentWarning": 2,
+  "sources": [
+    {
+      "id": 4215511432986138970,
+      "versionId": 1,
+      "name": "Mangabat",
+      "lang": "en",
+      "baseUrl": "https://www.mangabats.com"
+    }
+  ]
+}

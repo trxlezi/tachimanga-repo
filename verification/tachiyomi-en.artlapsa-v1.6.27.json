@@ -1,0 +1,29 @@
+{
+  "apk": "tachiyomi-en.artlapsa-v1.6.27.apk",
+  "sha256": "e31dd67a197e49a9f9c629578cf20af3453502e7d3f5fbd81d113aa791752e6c",
+  "pkg": "eu.kanade.tachiyomi.extension.en.artlapsa",
+  "version": "1.6.27",
+  "androidCode": 106027,
+  "minSdk": 21,
+  "name": "Tachiyomi: Art Lapsa",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 196,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/artlapsa/ArtLapsa;",
+    "Leu/kanade/tachiyomi/extension/en/artlapsa/ChapterLD$$serializer;",
+    "Leu/kanade/tachiyomi/extension/en/artlapsa/ChapterLD$Companion;",
+    "Leu/kanade/tachiyomi/extension/en/artlapsa/ChapterLD;",
+    "Leu/kanade/tachiyomi/extension/en/artlapsa/SeriesLD$$serializer;",
+    "Leu/kanade/tachiyomi/extension/en/artlapsa/SeriesLD$Companion;",
+    "Leu/kanade/tachiyomi/extension/en/artlapsa/SeriesLD;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}
