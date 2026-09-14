@@ -664,7 +664,7 @@ index cbc4ab10..ce66a969 100644
              description = document.selectFirst("#sinopsisWrapper p")?.text()
  
 diff --git a/src/pt/tiamanhwa/build.gradle.kts b/src/pt/tiamanhwa/build.gradle.kts
-index 0d2a714d..405b159f 100644
+index 0d2a714d..c66038a1 100644
 --- a/src/pt/tiamanhwa/build.gradle.kts
 +++ b/src/pt/tiamanhwa/build.gradle.kts
 @@ -6,7 +6,7 @@ plugins {
@@ -672,15 +672,24 @@ index 0d2a714d..405b159f 100644
  keiyoushi {
      name = "Tia Manhwa"
 -    versionCode = 3
-+    versionCode = 4
++    versionCode = 5
      contentWarning = ContentWarning.NSFW
      libVersion = "1.4"
      theme = "madaralegacy"
 diff --git a/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt b/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt
-index 30bb6640..f0e3cd86 100644
+index 30bb6640..60fceb44 100644
 --- a/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt
 +++ b/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt
-@@ -50,25 +50,13 @@ abstract class TiaManhwa : Madara() {
+@@ -44,31 +44,21 @@ abstract class TiaManhwa : Madara() {
+         val titleElement = element.selectFirst(".post-title a")!!
+         title = titleElement.text()
+         setUrlWithoutDomain(titleElement.attr("abs:href"))
+-        thumbnail_url = element.selectFirst(".item-thumb img")?.attr("src")
++        // Covers are lazy-loaded: src holds the theme's dflazy.jpg placeholder and the
++        // real URL lives in data-src, which imageFromElement already knows to prefer.
++        thumbnail_url = element.selectFirst(".item-thumb img")?.let(::imageFromElement)
+     }
+ 
      override fun searchMangaNextPageSelector() = "a.next, a.page-numbers.next"
  
      // Popular
@@ -712,3 +721,12 @@ index 30bb6640..f0e3cd86 100644
  
      // Latest
      // Override to fetch truly updated titles instead of the homepage slider used by default Madara.
+@@ -83,7 +73,7 @@ abstract class TiaManhwa : Madara() {
+         return SManga.create().apply {
+             title = titleElement.text()
+             setUrlWithoutDomain(titleElement.attr("abs:href"))
+-            thumbnail_url = thumbElement?.attr("src")
++            thumbnail_url = thumbElement?.let(::imageFromElement)
+         }
+     }
+ 
