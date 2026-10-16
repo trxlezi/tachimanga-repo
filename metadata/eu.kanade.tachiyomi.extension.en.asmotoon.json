@@ -3,14 +3,14 @@
   "theme": "keyoapp",
   "packageName": "eu.kanade.tachiyomi.extension.en.asmotoon",
   "name": "Asmodeus Scans",
-  "versionCode": 106026,
-  "versionName": "1.6.26",
+  "versionCode": 106028,
+  "versionName": "1.6.28",
   "extensionLib": "1.6",
   "contentWarning": 1,
   "sources": [
     {
-      "id": 5258838449396844455,
-      "versionId": 1,
+      "id": 2076371496779298312,
+      "versionId": 2,
       "name": "Asmodeus Scans",
       "lang": "en",
       "baseUrl": "https://asmotoon.com"

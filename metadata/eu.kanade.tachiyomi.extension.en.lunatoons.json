@@ -3,17 +3,17 @@
   "theme": "keyoapp",
   "packageName": "eu.kanade.tachiyomi.extension.en.lunatoons",
   "name": "Luna Toons",
-  "versionCode": 106023,
-  "versionName": "1.6.23",
+  "versionCode": 106025,
+  "versionName": "1.6.25",
   "extensionLib": "1.6",
   "contentWarning": 2,
   "sources": [
     {
-      "id": 1950516905235913490,
-      "versionId": 1,
+      "id": 4513668905743562887,
+      "versionId": 2,
       "name": "Luna Toons",
       "lang": "en",
-      "baseUrl": "https://lunatoons.org"
+      "baseUrl": "https://lunatoons.net"
     }
   ]
 }

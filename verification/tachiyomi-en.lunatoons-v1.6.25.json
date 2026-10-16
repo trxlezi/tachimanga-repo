@@ -1,0 +1,23 @@
+{
+  "apk": "tachiyomi-en.lunatoons-v1.6.25.apk",
+  "sha256": "60f0c3bf893829f288e3d32f8f8bd88c17ba783cf80e020e10ebed13109d9955",
+  "pkg": "eu.kanade.tachiyomi.extension.en.lunatoons",
+  "version": "1.6.25",
+  "androidCode": 106025,
+  "minSdk": 21,
+  "name": "Tachiyomi: Luna Toons",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 193,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/lunatoons/LunaToons;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}
