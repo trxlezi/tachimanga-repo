@@ -1,0 +1,23 @@
+{
+  "apk": "tachiyomi-pt.tiamanhwa-v1.4.61.apk",
+  "sha256": "1a242e04fbdb1563952393ae8b60a8665c3d1c8ffce6ce3d33b277c4746b7873",
+  "pkg": "eu.kanade.tachiyomi.extension.pt.tiamanhwa",
+  "version": "1.4.61",
+  "androidCode": 104061,
+  "minSdk": 21,
+  "name": "Tachiyomi: Tia Manhwa",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 1084,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

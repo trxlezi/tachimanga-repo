@@ -34,7 +34,7 @@ index d7df3a4f..0a985a4d 100644
              addInterceptor(CompressionInterceptor(Brotli, Gzip, Zstd))
  
 diff --git a/gradle/build-logic/src/main/kotlin/ExtensionPlugin.kt b/gradle/build-logic/src/main/kotlin/ExtensionPlugin.kt
-index 4a35ff2b..ba2456c9 100644
+index 4a35ff2b..f5459caf 100644
 --- a/gradle/build-logic/src/main/kotlin/ExtensionPlugin.kt
 +++ b/gradle/build-logic/src/main/kotlin/ExtensionPlugin.kt
 @@ -48,6 +48,10 @@ class ExtensionPlugin : Plugin<Project> {
@@ -77,7 +77,21 @@ index 4a35ff2b..ba2456c9 100644
                      proguardFiles(rootProject.file("common/proguard-rules.pro"))
                      @Suppress("UnstableApiUsage")
                      vcsInfo.include = false
-@@ -174,7 +179,7 @@ class ExtensionPlugin : Plugin<Project> {
+@@ -107,6 +112,13 @@ class ExtensionPlugin : Plugin<Project> {
+             packaging {
+                 resources.excludes.add("kotlin-tooling-metadata.json")
+             }
++
++            // The iOS runtime has no java.time, so any extension touching it fails to
++            // construct. Desugaring rewrites those references to an implementation bundled
++            // into the artifact itself, which should make them work regardless.
++            compileOptions {
++                isCoreLibraryDesugaringEnabled = true
++            }
+         }
+ 
+         val themeExtension = keiyoushi.theme.map { themeName ->
+@@ -174,7 +186,7 @@ class ExtensionPlugin : Plugin<Project> {
          }
  
          val signingConfig = extensions.getByType(ApplicationExtension::class.java).signingConfigs
@@ -86,7 +100,7 @@ index 4a35ff2b..ba2456c9 100644
  
          androidComponents {
              val bootClasspath = sdkComponents.bootClasspath
-@@ -202,7 +207,7 @@ class ExtensionPlugin : Plugin<Project> {
+@@ -202,7 +214,7 @@ class ExtensionPlugin : Plugin<Project> {
                      output.outputFileName.set(filenameProvider.map { "$it.apk" })
                  }
  
@@ -95,7 +109,15 @@ index 4a35ff2b..ba2456c9 100644
                      val externalLibs = providedClasspath.incoming.artifactView {
                          attributes.attribute(ARTIFACT_TYPE_ATTRIBUTE, "android-classes-jar")
                      }.files
-@@ -275,9 +280,10 @@ class ExtensionPlugin : Plugin<Project> {
+@@ -241,6 +253,7 @@ class ExtensionPlugin : Plugin<Project> {
+         }
+ 
+         dependencies {
++            add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:2.1.5")
+             addProvider("implementation", keiyoushi.theme.map { project(":lib-multisrc:$it") })
+             implementation(project(":core"))
+             compileOnly(libs.bundles.common)
+@@ -275,9 +288,10 @@ class ExtensionPlugin : Plugin<Project> {
              }
  
              val packageName = "eu.kanade.tachiyomi.extension.${pkgName.get()}"
@@ -3564,7 +3586,7 @@ index c4d3c92c..586cd825 100644
      }
  }
 diff --git a/src/pt/tiamanhwa/build.gradle.kts b/src/pt/tiamanhwa/build.gradle.kts
-index 0d2a714d..23b55f9c 100644
+index 0d2a714d..282f9dee 100644
 --- a/src/pt/tiamanhwa/build.gradle.kts
 +++ b/src/pt/tiamanhwa/build.gradle.kts
 @@ -6,7 +6,7 @@ plugins {
@@ -3572,15 +3594,24 @@ index 0d2a714d..23b55f9c 100644
  keiyoushi {
      name = "Tia Manhwa"
 -    versionCode = 3
-+    versionCode = 8
++    versionCode = 9
      contentWarning = ContentWarning.NSFW
      libVersion = "1.4"
      theme = "madaralegacy"
 diff --git a/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt b/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt
-index 30bb6640..60fceb44 100644
+index 30bb6640..7d3a3395 100644
 --- a/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt
 +++ b/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt
-@@ -44,31 +44,21 @@ abstract class TiaManhwa : Madara() {
+@@ -12,6 +12,8 @@ import okhttp3.Response
+ import org.jsoup.Jsoup
+ import org.jsoup.nodes.Element
+ import java.text.SimpleDateFormat
++import java.time.LocalDate
++import java.time.format.DateTimeFormatter
+ import java.util.Locale
+ 
+ @Source
+@@ -44,32 +46,40 @@ abstract class TiaManhwa : Madara() {
          val titleElement = element.selectFirst(".post-title a")!!
          title = titleElement.text()
          setUrlWithoutDomain(titleElement.attr("abs:href"))
@@ -3594,12 +3625,7 @@ index 30bb6640..60fceb44 100644
  
      // Popular
 -    override fun popularMangaRequest(page: Int) = GET(baseUrl, headers)
-+    // Keyed off a homepage slider whose id is a WordPress widget instance: #manga-slider-2
-+    // became -3 and -4 once the site added widgets, so the list silently came back empty.
-+    // Madara's own views listing paginates by URL and does not depend on widget numbering.
-+    // Its load-more path is not an option here either: admin-ajax.php answers 403.
-+    override fun popularMangaRequest(page: Int): Request = GET("$baseUrl/$mangaSubString/${searchPage(page)}?m_orderby=views", headers)
- 
+-
 -    override fun popularMangaSelector() = "#manga-slider-2 .slider__item"
 -
 -    override fun popularMangaFromElement(element: Element): SManga {
@@ -3613,15 +3639,38 @@ index 30bb6640..60fceb44 100644
 -
 -            setUrlWithoutDomain(anchor.attr("href"))
 -            thumbnail_url = element.selectFirst("img")?.absUrl("src")
--        }
--    }
--
--    override fun popularMangaNextPageSelector(): String? = null
++    // Keyed off a homepage slider whose id is a WordPress widget instance: #manga-slider-2
++    // became -3 and -4 once the site added widgets, so the list silently came back empty.
++    // Madara's own views listing paginates by URL and does not depend on widget numbering.
++    // Its load-more path is not an option here either: admin-ajax.php answers 403.
++    override fun popularMangaRequest(page: Int): Request = GET("$baseUrl/$mangaSubString/${searchPage(page)}?m_orderby=views", headers)
++
 +    override fun popularMangaNextPageSelector(): String? = "a.nextpostslink"
++
++    // TESTE TEMPORARIO - sera removido assim que o resultado chegar.
++    // Referencia direta a java.time, igual a Temple Scan ES. Com core library desugaring
++    // ligado, o bytecode passa a apontar para a implementacao embutida no proprio artefato
++    // em vez do runtime. Se isso sobreviver a conversao para jar, o catalogo inteiro
++    // destrava; por isso o teste usa referencia direta e nao reflexao.
++    override fun popularMangaParse(response: Response): MangasPage {
++        val resultado = runCatching {
++            DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.forLanguageTag("pt")).format(LocalDate.of(2026, 10, 16))
+         }
++        throw Exception(
++            "TESTE desugaring: " + if (resultado.isSuccess) {
++                "FUNCIONOU -> ${resultado.getOrNull()}"
++            } else {
++                "FALHOU -> ${resultado.exceptionOrNull()}"
++            },
++        )
+     }
  
+-    override fun popularMangaNextPageSelector(): String? = null
+-
      // Latest
      // Override to fetch truly updated titles instead of the homepage slider used by default Madara.
-@@ -83,7 +73,7 @@ abstract class TiaManhwa : Madara() {
+     override fun latestUpdatesRequest(page: Int): Request = GET("$baseUrl/page/$page/", headers)
+@@ -83,7 +93,7 @@ abstract class TiaManhwa : Madara() {
          return SManga.create().apply {
              title = titleElement.text()
              setUrlWithoutDomain(titleElement.attr("abs:href"))
