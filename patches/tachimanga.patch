@@ -3577,10 +3577,10 @@ index 0d2a714d..602b23e0 100644
      libVersion = "1.4"
      theme = "madaralegacy"
 diff --git a/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt b/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt
-index 30bb6640..60fceb44 100644
+index 30bb6640..90258fb2 100644
 --- a/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt
 +++ b/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt
-@@ -44,31 +44,21 @@ abstract class TiaManhwa : Madara() {
+@@ -44,32 +44,42 @@ abstract class TiaManhwa : Madara() {
          val titleElement = element.selectFirst(".post-title a")!!
          title = titleElement.text()
          setUrlWithoutDomain(titleElement.attr("abs:href"))
@@ -3594,12 +3594,7 @@ index 30bb6640..60fceb44 100644
  
      // Popular
 -    override fun popularMangaRequest(page: Int) = GET(baseUrl, headers)
-+    // Keyed off a homepage slider whose id is a WordPress widget instance: #manga-slider-2
-+    // became -3 and -4 once the site added widgets, so the list silently came back empty.
-+    // Madara's own views listing paginates by URL and does not depend on widget numbering.
-+    // Its load-more path is not an option here either: admin-ajax.php answers 403.
-+    override fun popularMangaRequest(page: Int): Request = GET("$baseUrl/$mangaSubString/${searchPage(page)}?m_orderby=views", headers)
- 
+-
 -    override fun popularMangaSelector() = "#manga-slider-2 .slider__item"
 -
 -    override fun popularMangaFromElement(element: Element): SManga {
@@ -3613,15 +3608,40 @@ index 30bb6640..60fceb44 100644
 -
 -            setUrlWithoutDomain(anchor.attr("href"))
 -            thumbnail_url = element.selectFirst("img")?.absUrl("src")
--        }
--    }
--
--    override fun popularMangaNextPageSelector(): String? = null
++    // Keyed off a homepage slider whose id is a WordPress widget instance: #manga-slider-2
++    // became -3 and -4 once the site added widgets, so the list silently came back empty.
++    // Madara's own views listing paginates by URL and does not depend on widget numbering.
++    // Its load-more path is not an option here either: admin-ajax.php answers 403.
++    override fun popularMangaRequest(page: Int): Request = GET("$baseUrl/$mangaSubString/${searchPage(page)}?m_orderby=views", headers)
++
 +    override fun popularMangaNextPageSelector(): String? = "a.nextpostslink"
++
++    // TESTE TEMPORARIO - sera removido assim que o resultado chegar.
++    // Temple Scan ES inicializa um DateTimeFormatter (java.time) como campo da fonte, e
++    // nenhuma extensao que funciona neste repositorio usa java.time. Isto verifica se o
++    // runtime do Tachimanga tem essa classe. Usa reflexao de proposito: uma referencia
++    // direta dispararia o lint NewApi, ja que java.time exige API 26 e o minSdk aqui e 21.
++    override fun popularMangaParse(response: Response): MangasPage {
++        val resultado = runCatching {
++            val cls = Class.forName("java.time.format.DateTimeFormatter")
++            val ofPattern = cls.getMethod("ofPattern", String::class.java, Locale::class.java)
++            ofPattern.invoke(null, "MMMM d, yyyy", Locale.forLanguageTag("pt")).toString()
+         }
++        throw Exception(
++            "TESTE java.time: " + if (resultado.isSuccess) {
++                "DISPONIVEL -> ${resultado.getOrNull()}"
++            } else {
++                "AUSENTE -> ${resultado.exceptionOrNull()}"
++            },
++        )
+     }
  
+-    override fun popularMangaNextPageSelector(): String? = null
+-
      // Latest
      // Override to fetch truly updated titles instead of the homepage slider used by default Madara.
-@@ -83,7 +73,7 @@ abstract class TiaManhwa : Madara() {
+     override fun latestUpdatesRequest(page: Int): Request = GET("$baseUrl/page/$page/", headers)
+@@ -83,7 +93,7 @@ abstract class TiaManhwa : Madara() {
          return SManga.create().apply {
              title = titleElement.text()
              setUrlWithoutDomain(titleElement.attr("abs:href"))
