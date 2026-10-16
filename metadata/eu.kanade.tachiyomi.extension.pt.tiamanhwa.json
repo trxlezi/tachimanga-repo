@@ -3,8 +3,8 @@
   "theme": "madaralegacy",
   "packageName": "eu.kanade.tachiyomi.extension.pt.tiamanhwa",
   "name": "Tia Manhwa",
-  "versionCode": 104059,
-  "versionName": "1.4.59",
+  "versionCode": 104060,
+  "versionName": "1.4.60",
   "extensionLib": "1.4",
   "contentWarning": 3,
   "sources": [
