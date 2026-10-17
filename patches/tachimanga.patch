@@ -3586,7 +3586,7 @@ index c4d3c92c..586cd825 100644
      }
  }
 diff --git a/src/pt/tiamanhwa/build.gradle.kts b/src/pt/tiamanhwa/build.gradle.kts
-index 0d2a714d..282f9dee 100644
+index 0d2a714d..18207908 100644
 --- a/src/pt/tiamanhwa/build.gradle.kts
 +++ b/src/pt/tiamanhwa/build.gradle.kts
 @@ -6,7 +6,7 @@ plugins {
@@ -3594,12 +3594,12 @@ index 0d2a714d..282f9dee 100644
  keiyoushi {
      name = "Tia Manhwa"
 -    versionCode = 3
-+    versionCode = 9
++    versionCode = 11
      contentWarning = ContentWarning.NSFW
      libVersion = "1.4"
      theme = "madaralegacy"
 diff --git a/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt b/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt
-index 30bb6640..7d3a3395 100644
+index 30bb6640..4fe9a47c 100644
 --- a/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt
 +++ b/src/pt/tiamanhwa/src/eu/kanade/tachiyomi/extension/pt/tiamanhwa/TiaManhwa.kt
 @@ -12,6 +12,8 @@ import okhttp3.Response
@@ -3611,7 +3611,7 @@ index 30bb6640..7d3a3395 100644
  import java.util.Locale
  
  @Source
-@@ -44,32 +46,40 @@ abstract class TiaManhwa : Madara() {
+@@ -44,31 +46,37 @@ abstract class TiaManhwa : Madara() {
          val titleElement = element.selectFirst(".post-title a")!!
          title = titleElement.text()
          setUrlWithoutDomain(titleElement.attr("abs:href"))
@@ -3643,18 +3643,14 @@ index 30bb6640..7d3a3395 100644
 +    // became -3 and -4 once the site added widgets, so the list silently came back empty.
 +    // Madara's own views listing paginates by URL and does not depend on widget numbering.
 +    // Its load-more path is not an option here either: admin-ajax.php answers 403.
-+    override fun popularMangaRequest(page: Int): Request = GET("$baseUrl/$mangaSubString/${searchPage(page)}?m_orderby=views", headers)
-+
-+    override fun popularMangaNextPageSelector(): String? = "a.nextpostslink"
-+
 +    // TESTE TEMPORARIO - sera removido assim que o resultado chegar.
-+    // Referencia direta a java.time, igual a Temple Scan ES. Com core library desugaring
-+    // ligado, o bytecode passa a apontar para a implementacao embutida no proprio artefato
-+    // em vez do runtime. Se isso sobreviver a conversao para jar, o catalogo inteiro
-+    // destrava; por isso o teste usa referencia direta e nao reflexao.
-+    override fun popularMangaParse(response: Response): MangasPage {
++    // Fica no request, e nao no parse: o site passou a responder 403 (Cloudflare) e um probe
++    // no parse nunca chegaria a rodar. Aqui ele executa antes de qualquer acesso a rede.
++    // Referencia direta a java.time, igual a Temple Scan ES, para exercitar o desugaring.
++    override fun popularMangaRequest(page: Int): Request {
 +        val resultado = runCatching {
-+            DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.forLanguageTag("pt")).format(LocalDate.of(2026, 10, 16))
++            DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.forLanguageTag("pt"))
++                .format(LocalDate.of(2026, 10, 16))
          }
 +        throw Exception(
 +            "TESTE desugaring: " + if (resultado.isSuccess) {
@@ -3666,11 +3662,11 @@ index 30bb6640..7d3a3395 100644
      }
  
 -    override fun popularMangaNextPageSelector(): String? = null
--
++    override fun popularMangaNextPageSelector(): String? = "a.nextpostslink"
+ 
      // Latest
      // Override to fetch truly updated titles instead of the homepage slider used by default Madara.
-     override fun latestUpdatesRequest(page: Int): Request = GET("$baseUrl/page/$page/", headers)
-@@ -83,7 +93,7 @@ abstract class TiaManhwa : Madara() {
+@@ -83,7 +91,7 @@ abstract class TiaManhwa : Madara() {
          return SManga.create().apply {
              title = titleElement.text()
              setUrlWithoutDomain(titleElement.attr("abs:href"))
