@@ -554,7 +554,7 @@ index 96301b3e..69ad4c73 100644
      libVersion = "1.6"
      theme = "keyoapp"
 diff --git a/src/es/aedex/build.gradle.kts b/src/es/aedex/build.gradle.kts
-index b8d22027..95770e7d 100644
+index b8d22027..72021eb6 100644
 --- a/src/es/aedex/build.gradle.kts
 +++ b/src/es/aedex/build.gradle.kts
 @@ -7,7 +7,7 @@ plugins {
@@ -562,35 +562,32 @@ index b8d22027..95770e7d 100644
      name = "Aedex"
      pkgName = "es.templescanesp"
 -    versionCode = 74
-+    versionCode = 76
++    versionCode = 77
      contentWarning = ContentWarning.NSFW
      libVersion = "1.6"
      theme = "catharsis"
 diff --git a/src/es/aedex/src/eu/kanade/tachiyomi/extension/es/aedex/Aedex.kt b/src/es/aedex/src/eu/kanade/tachiyomi/extension/es/aedex/Aedex.kt
-index e9b77814..11bd9c5f 100644
+index e9b77814..2ebf46d1 100644
 --- a/src/es/aedex/src/eu/kanade/tachiyomi/extension/es/aedex/Aedex.kt
 +++ b/src/es/aedex/src/eu/kanade/tachiyomi/extension/es/aedex/Aedex.kt
-@@ -35,6 +35,19 @@ abstract class Aedex : Catharsis() {
+@@ -35,6 +35,16 @@ abstract class Aedex : Catharsis() {
  
      override fun OkHttpClient.Builder.addReaderInterceptors(): OkHttpClient.Builder = addInterceptor(ImageInterceptor())
  
 +    // The app's client carries application interceptors that rebuild the response. A WebSocket
 +    // handshake loses its exchange that way and OkHttp aborts with "Web socket exchange
-+    // missing: bad interceptor?". Strip the interceptors but keep the cookie jar, DNS, proxy
-+    // and timeouts, so the upgrade is a plain one. Browser headers are passed in by the caller.
-+    private val webSocketClient by lazy {
-+        network.client.newBuilder()
-+            .apply {
-+                interceptors().clear()
-+                networkInterceptors().clear()
-+            }
-+            .build()
-+    }
++    // missing: bad interceptor?". So the upgrade gets its own plain client.
++    //
++    // Built from scratch rather than derived: Builder.interceptors()/networkInterceptors()
++    // changed between OkHttp versions, and calling them against a runtime that disagrees is
++    // what raises IncompatibleClassChangeError. The handshake needs no cookies — it carries
++    // its own ticket — and the caller supplies the browser headers.
++    private val webSocketClient by lazy { OkHttpClient() }
 +
      override fun getChapterUrl(chapter: SChapter) = "$baseUrl/$mangaPath/${chapter.url}"
  
      // fecha_publicacion has no offset; the site shows date_created
-@@ -52,7 +65,7 @@ abstract class Aedex : Catharsis() {
+@@ -52,7 +62,7 @@ abstract class Aedex : Catharsis() {
              .build()
          val free = client.get(chapterUrl, readerHeaders, fetch, ensureSuccess = false).ensureSiteSuccess().parseAs<FreeReaderDto>()
          // WebSockets stay on OkHttp: Cronet can't upgrade a connection

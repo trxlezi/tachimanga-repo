@@ -3,8 +3,8 @@
   "theme": "catharsis",
   "packageName": "eu.kanade.tachiyomi.extension.es.templescanesp",
   "name": "Aedex",
-  "versionCode": 106077,
-  "versionName": "1.6.77",
+  "versionCode": 106078,
+  "versionName": "1.6.78",
   "extensionLib": "1.6",
   "contentWarning": 3,
   "sources": [
