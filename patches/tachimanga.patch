@@ -554,7 +554,7 @@ index 96301b3e..69ad4c73 100644
      libVersion = "1.6"
      theme = "keyoapp"
 diff --git a/src/es/aedex/build.gradle.kts b/src/es/aedex/build.gradle.kts
-index b8d22027..72021eb6 100644
+index b8d22027..a58c28a9 100644
 --- a/src/es/aedex/build.gradle.kts
 +++ b/src/es/aedex/build.gradle.kts
 @@ -7,7 +7,7 @@ plugins {
@@ -562,15 +562,15 @@ index b8d22027..72021eb6 100644
      name = "Aedex"
      pkgName = "es.templescanesp"
 -    versionCode = 74
-+    versionCode = 77
++    versionCode = 78
      contentWarning = ContentWarning.NSFW
      libVersion = "1.6"
      theme = "catharsis"
 diff --git a/src/es/aedex/src/eu/kanade/tachiyomi/extension/es/aedex/Aedex.kt b/src/es/aedex/src/eu/kanade/tachiyomi/extension/es/aedex/Aedex.kt
-index e9b77814..2ebf46d1 100644
+index e9b77814..7141f220 100644
 --- a/src/es/aedex/src/eu/kanade/tachiyomi/extension/es/aedex/Aedex.kt
 +++ b/src/es/aedex/src/eu/kanade/tachiyomi/extension/es/aedex/Aedex.kt
-@@ -35,6 +35,16 @@ abstract class Aedex : Catharsis() {
+@@ -35,37 +35,64 @@ abstract class Aedex : Catharsis() {
  
      override fun OkHttpClient.Builder.addReaderInterceptors(): OkHttpClient.Builder = addInterceptor(ImageInterceptor())
  
@@ -587,15 +587,78 @@ index e9b77814..2ebf46d1 100644
      override fun getChapterUrl(chapter: SChapter) = "$baseUrl/$mangaPath/${chapter.url}"
  
      // fecha_publicacion has no offset; the site shows date_created
-@@ -52,7 +62,7 @@ abstract class Aedex : Catharsis() {
-             .build()
-         val free = client.get(chapterUrl, readerHeaders, fetch, ensureSuccess = false).ensureSiteSuccess().parseAs<FreeReaderDto>()
-         // WebSockets stay on OkHttp: Cronet can't upgrade a connection
+     override fun chapterDate(chapter: ChapterDto) = Instant.tryParse(chapter.dateCreated)
+ 
++    // TESTE TEMPORARIO - build de diagnostico, sera removido.
++    // O app mostra so a mensagem do erro, nao o stack trace, e o Tachimanga nao
++    // documenta exportacao de log. Entao a extensao reporta a falha na propria tela,
++    // com tipo, mensagem, causa e os primeiros quadros do stack.
+     override suspend fun getPageList(chapter: SChapter): List<Page> {
+-        val fetch = Fetch.XHR.from(getChapterUrl(chapter))
+-        val freeReader = FreeReader()
+-        val readerHeaders = apiHeaders.newBuilder()
+-            .set("X-Catharsis-Reader-Pass", readerPass(fetch).pass)
+-            .set("X-Catharsis-Ws-Pub", freeReader.publicKey)
+-            .build()
+-        val chapterUrl = "$apiUrl/mangas/${chapter.url}".toHttpUrl().newBuilder()
+-            .addQueryParameter("modo", "gratis")
+-            .build()
+-        val free = client.get(chapterUrl, readerHeaders, fetch, ensureSuccess = false).ensureSiteSuccess().parseAs<FreeReaderDto>()
+-        // WebSockets stay on OkHttp: Cronet can't upgrade a connection
 -        val ready = freeReader.countdown(network.client, headersBuilder().set("Origin", baseUrl).build(), free.wsUrl, free.wsTicket)
-+        val ready = freeReader.countdown(webSocketClient, headersBuilder().set("Origin", baseUrl).build(), free.wsUrl, free.wsTicket)
-         val reader = client.post(
-             ready.redirectUrl!!,
-             Fetch.DOCUMENT.from(getChapterUrl(chapter)),
+-        val reader = client.post(
+-            ready.redirectUrl!!,
+-            Fetch.DOCUMENT.from(getChapterUrl(chapter)),
+-            FormBody.Builder().add("data", ready.redirectData!!).build(),
+-        ).asJsoup()
+-        val xorKey = reader.select("script:not([src])").firstNotNullOfOrNull { XOR_KEY_REGEX.find(it.data()) }?.groupValues?.get(1).orEmpty()
+-        return reader.select("canvas.manga-page-canvas").mapIndexed { index, canvas ->
+-            // XOR key and scramble key for ImageInterceptor; pages without data-k aren't shuffled
+-            val imageUrl = canvas.absUrl("data-src").toHttpUrl().newBuilder()
+-                .fragment("$xorKey:${canvas.attr("data-k")}")
++        try {
++            val fetch = Fetch.XHR.from(getChapterUrl(chapter))
++            val freeReader = FreeReader()
++            val readerHeaders = apiHeaders.newBuilder()
++                .set("X-Catharsis-Reader-Pass", readerPass(fetch).pass)
++                .set("X-Catharsis-Ws-Pub", freeReader.publicKey)
++                .build()
++            val chapterUrl = "$apiUrl/mangas/${chapter.url}".toHttpUrl().newBuilder()
++                .addQueryParameter("modo", "gratis")
+                 .build()
+-                .toString()
+-            Page(index, url = reader.location(), imageUrl = imageUrl)
++            val free = client.get(chapterUrl, readerHeaders, fetch, ensureSuccess = false).ensureSiteSuccess().parseAs<FreeReaderDto>()
++            // WebSockets stay on OkHttp: Cronet can't upgrade a connection
++            val ready = freeReader.countdown(webSocketClient, headersBuilder().set("Origin", baseUrl).build(), free.wsUrl, free.wsTicket)
++            val reader = client.post(
++                ready.redirectUrl!!,
++                Fetch.DOCUMENT.from(getChapterUrl(chapter)),
++                FormBody.Builder().add("data", ready.redirectData!!).build(),
++            ).asJsoup()
++            val xorKey = reader.select("script:not([src])").firstNotNullOfOrNull { XOR_KEY_REGEX.find(it.data()) }?.groupValues?.get(1).orEmpty()
++            return reader.select("canvas.manga-page-canvas").mapIndexed { index, canvas ->
++                // XOR key and scramble key for ImageInterceptor; pages without data-k aren't shuffled
++                val imageUrl = canvas.absUrl("data-src").toHttpUrl().newBuilder()
++                    .fragment("$xorKey:${canvas.attr("data-k")}")
++                    .build()
++                    .toString()
++                Page(index, url = reader.location(), imageUrl = imageUrl)
++            }
++        } catch (t: Throwable) {
++            val quadros = t.stackTrace.take(8).joinToString(" <- ") {
++                it.className.substringAfterLast(".") + "." + it.methodName + ":" + it.lineNumber
++            }
++            val causa = t.cause?.let { c -> c::class.java.name + ": " + c.message } ?: "nenhuma"
++            throw Exception(
++                "DIAG Aedex || tipo: " + t::class.java.name +
++                    " || msg: " + t.message +
++                    " || causa: " + causa +
++                    " || stack: " + quadros,
++            )
+         }
+     }
+ 
 diff --git a/src/es/ikigaimangas/build.gradle.kts b/src/es/ikigaimangas/build.gradle.kts
 index 68029362..be19a7aa 100644
 --- a/src/es/ikigaimangas/build.gradle.kts
