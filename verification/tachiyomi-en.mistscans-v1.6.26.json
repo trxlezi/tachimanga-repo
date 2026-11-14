@@ -1,0 +1,23 @@
+{
+  "apk": "tachiyomi-en.mistscans-v1.6.26.apk",
+  "sha256": "024dd8521805506574a6f7890a311ce3d2aae157d280482da442e2a850c4d808",
+  "pkg": "eu.kanade.tachiyomi.extension.en.mistscans",
+  "version": "1.6.26",
+  "androidCode": 106026,
+  "minSdk": 21,
+  "name": "Tachiyomi: Mist Scans",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 1222,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/mistscans/MistScans;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

@@ -126,22 +126,31 @@ def build_index(offline=False):
         if pkg in seen:
             raise ValueError(f'Multiple APK versions for {pkg}; move old APKs out of apk/')
         seen.add(pkg)
-        upstream = official[pkg]
+        upstream = official.get(pkg)
         built = json.loads((ROOT / 'metadata' / f'{pkg}.json').read_text(encoding='utf-8'))
         if built['packageName'] != pkg or built['versionName'] != meta['version']:
             raise ValueError(f'{pkg}: build metadata does not match APK')
         if built['versionCode'] != meta['androidCode'] or meta['minSdk'] != 21:
             raise ValueError(f'{pkg}: invalid version or minSdk')
         sources = []
-        for source in built['sources']:
-            match = next((s for s in upstream['sources'] if s['id'] == str(source['id'])
-                          and s['name'] == source['name'] and s['lang'] == source['lang']), None)
-            if match is None:
-                raise ValueError(f'{pkg}: built source identity differs from official index')
-            sources.append(dict(name=match['name'], lang=match['lang'],
-                                id=str(match['id']), baseUrl=source['baseUrl']))
-        if len(sources) != len(upstream['sources']):
-            raise ValueError(f'{pkg}: source count differs from official index')
+        if upstream is None:
+            # Upstream dropped this source, so there is nothing left to check the identity
+            # against. Keep serving the build we already have rather than silently losing
+            # the extension, and say so instead of pretending it was verified.
+            print(f'{pkg}: no longer in the official index; identity not verified')
+            sources = [dict(name=source['name'], lang=source['lang'],
+                            id=str(source['id']), baseUrl=source['baseUrl'])
+                       for source in built['sources']]
+        else:
+            for source in built['sources']:
+                match = next((s for s in upstream['sources'] if s['id'] == str(source['id'])
+                              and s['name'] == source['name'] and s['lang'] == source['lang']), None)
+                if match is None:
+                    raise ValueError(f'{pkg}: built source identity differs from official index')
+                sources.append(dict(name=match['name'], lang=match['lang'],
+                                    id=str(match['id']), baseUrl=source['baseUrl']))
+            if len(sources) != len(upstream['sources']):
+                raise ValueError(f'{pkg}: source count differs from official index')
         # The package segment only approximates the language: pt/tiamanhwa is really
         # pt-BR, and the client groups the extension list by this field. Derive it from
         # the sources the way the client does, and fall back when they disagree.

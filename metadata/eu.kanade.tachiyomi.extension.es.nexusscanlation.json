@@ -3,17 +3,17 @@
   "theme": null,
   "packageName": "eu.kanade.tachiyomi.extension.es.nexusscanlation",
   "name": "NexusScanlation",
-  "versionCode": 106005,
-  "versionName": "1.6.5",
+  "versionCode": 106009,
+  "versionName": "1.6.9",
   "extensionLib": "1.6",
   "contentWarning": 3,
   "sources": [
     {
       "id": 4086183896761281232,
-      "versionId": 1,
       "name": "NexusScanlation",
       "lang": "es",
       "baseUrl": "https://nexusscanlation.com"
     }
-  ]
+  ],
+  "contentHash": ""
 }

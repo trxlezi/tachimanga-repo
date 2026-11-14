@@ -1,0 +1,23 @@
+{
+  "apk": "tachiyomi-en.timelesstoons-v1.6.26.apk",
+  "sha256": "9025145746f11f28edd538821d9c6a5da4d4025160a87c6b0c6905f0999e2877",
+  "pkg": "eu.kanade.tachiyomi.extension.en.timelesstoons",
+  "version": "1.6.26",
+  "androidCode": 106026,
+  "minSdk": 21,
+  "name": "Tachiyomi: TimelessToons",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 1222,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/timelesstoons/TimelessToons;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

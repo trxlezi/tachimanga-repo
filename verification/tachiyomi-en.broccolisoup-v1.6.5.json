@@ -1,0 +1,25 @@
+{
+  "apk": "tachiyomi-en.broccolisoup-v1.6.5.apk",
+  "sha256": "7c2dc62f9c47fa5daebfa134947c79d42ec1eb740a892adc76e7e7b4fdd090b9",
+  "pkg": "eu.kanade.tachiyomi.extension.en.broccolisoup",
+  "version": "1.6.5",
+  "androidCode": 106005,
+  "minSdk": 21,
+  "name": "Tachiyomi: Broccoli Soup",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 1173,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/broccolisoup/BroccoliSoup$fetchMangaUpdate$1;",
+    "Leu/kanade/tachiyomi/extension/en/broccolisoup/BroccoliSoup$getPageList$1;",
+    "Leu/kanade/tachiyomi/extension/en/broccolisoup/BroccoliSoup;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

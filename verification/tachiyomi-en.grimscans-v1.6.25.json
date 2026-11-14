@@ -1,0 +1,23 @@
+{
+  "apk": "tachiyomi-en.grimscans-v1.6.25.apk",
+  "sha256": "e85ef667e21b65764d3ed811ca3bf1779617a27ff9ad0eeb15aa3be172c5015d",
+  "pkg": "eu.kanade.tachiyomi.extension.en.grimscans",
+  "version": "1.6.25",
+  "androidCode": 106025,
+  "minSdk": 21,
+  "name": "Tachiyomi: Grim Scans",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 1222,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/grimscans/GrimScans;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

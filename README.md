@@ -83,6 +83,19 @@ python -m unittest discover -s tests -v
 
 `build_index.py` lê versão, pacote e minSdk reais via aapt2; compara os metadados gerados pelo build com os IDs exatos do `index.pb` oficial (protobuf gzipado). Não passa IDs por ponto flutuante. Divergências e metadados ausentes abortam a geração, preservando o índice anterior.
 
+A validação é por conjunto: uma extensão divergente aborta a geração de **todas**. Quando o upstream remove uma fonte, não há mais identidade para comparar — nesse caso a extensão é mantida e o script avisa `no longer in the official index; identity not verified`, em vez de abortar ou fingir que verificou.
+
+### java.time e desugaring
+
+O runtime do Tachimanga **não implementa `java.time`**. Uma extensão que o use num campo da fonte falha ao ser construída: instala, aparece na lista e não carrega nada, enquanto a WebView funciona. Isso atinge 853 das 1434 extensões do keiyoushi (59%), 555 delas só por herdarem um tema afetado.
+
+O `ExtensionPlugin` habilita *core library desugaring*, que reescreve as chamadas para uma implementação embutida no próprio artefato. Isso sobrevive à conversão para jar — o artefato passa a carregar classes `j$/time/` e nenhuma referência a `java/time`. O custo é o tamanho: cada jar triplica.
+
+Duas armadilhas ligadas a isso:
+
+- **Não suba `android-sdk-min` para 26.** O upstream usa 26, e o patch força **21** de propósito: com minSdk 26 o AGP considera o desugaring desnecessário e para de reescrever, quebrando tudo no iOS.
+- O lint acusa `NewApi` em `java.time` porque roda por módulo e não enxerga o desugaring, que acontece na geração do dex. A regra `NewApi` é desativada no `ExtensionPlugin` e no `ThemePlugin` — só ela, não o lint inteiro.
+
 `code` é o último componente da versão (`3` para `1.4.3`), não o versionCode Android codificado (`104003`). `versionId` vem da declaração da fonte, e não é incrementado ao corrigir uma extensão.
 
 ### JARs

@@ -1,0 +1,25 @@
+{
+  "apk": "tachiyomi-en.mangakakalot-v1.6.27.apk",
+  "sha256": "36e2ffdd9f279f1f4a497c9ced7f6274a298b5eff4538e64eea2d5cc219a683e",
+  "pkg": "eu.kanade.tachiyomi.extension.en.mangakakalot",
+  "version": "1.6.27",
+  "androidCode": 106027,
+  "minSdk": 21,
+  "name": "Tachiyomi: Mangakakalot",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 1170,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/mangakakalot/Mangakakalot$configureClient$lambda$0$$inlined$-addInterceptor$1;",
+    "Leu/kanade/tachiyomi/extension/en/mangakakalot/Mangakakalot$configureClient$lambda$0$$inlined$-addInterceptor$2;",
+    "Leu/kanade/tachiyomi/extension/en/mangakakalot/Mangakakalot;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

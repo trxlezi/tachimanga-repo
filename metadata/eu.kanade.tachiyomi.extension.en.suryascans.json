@@ -3,17 +3,17 @@
   "theme": "keyoapp",
   "packageName": "eu.kanade.tachiyomi.extension.en.suryascans",
   "name": "Genz Toons",
-  "versionCode": 106056,
-  "versionName": "1.6.56",
+  "versionCode": 106058,
+  "versionName": "1.6.58",
   "extensionLib": "1.6",
   "contentWarning": 1,
   "sources": [
     {
       "id": 1061713767402958340,
-      "versionId": 1,
       "name": "Genz Toons",
       "lang": "en",
       "baseUrl": "https://genztoons.org"
     }
-  ]
+  ],
+  "contentHash": ""
 }

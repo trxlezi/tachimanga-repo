@@ -1,19 +1,19 @@
 {
   "module": "pt.tiamanhwa",
-  "theme": "madaralegacy",
+  "theme": "madara",
   "packageName": "eu.kanade.tachiyomi.extension.pt.tiamanhwa",
   "name": "Tia Manhwa",
-  "versionCode": 104064,
-  "versionName": "1.4.64",
-  "extensionLib": "1.4",
+  "versionCode": 106065,
+  "versionName": "1.6.65",
+  "extensionLib": "1.6",
   "contentWarning": 3,
   "sources": [
     {
       "id": 8823653003339002799,
-      "versionId": 1,
       "name": "Tia Manhwa",
       "lang": "pt-BR",
       "baseUrl": "https://tiamanhwa.com"
     }
-  ]
+  ],
+  "contentHash": ""
 }

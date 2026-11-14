@@ -3,17 +3,17 @@
   "theme": null,
   "packageName": "eu.kanade.tachiyomi.extension.en.broccolisoup",
   "name": "Broccoli Soup",
-  "versionCode": 104003,
-  "versionName": "1.4.3",
-  "extensionLib": "1.4",
+  "versionCode": 106005,
+  "versionName": "1.6.5",
+  "extensionLib": "1.6",
   "contentWarning": 1,
   "sources": [
     {
       "id": 2175678633501332475,
-      "versionId": 1,
       "name": "Broccoli Soup",
       "lang": "en",
       "baseUrl": "https://politeandgood.com"
     }
-  ]
+  ],
+  "contentHash": ""
 }

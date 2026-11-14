@@ -3,17 +3,17 @@
   "theme": "keyoapp",
   "packageName": "eu.kanade.tachiyomi.extension.en.erisscans",
   "name": "Eris Scans",
-  "versionCode": 106023,
-  "versionName": "1.6.23",
+  "versionCode": 106025,
+  "versionName": "1.6.25",
   "extensionLib": "1.6",
   "contentWarning": 2,
   "sources": [
     {
       "id": 8358420357808595754,
-      "versionId": 1,
       "name": "Eris Scans",
       "lang": "en",
       "baseUrl": "https://erisscans.com"
     }
-  ]
+  ],
+  "contentHash": ""
 }

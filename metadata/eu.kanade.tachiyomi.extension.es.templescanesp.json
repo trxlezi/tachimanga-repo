@@ -1,0 +1,19 @@
+{
+  "module": "es.aedex",
+  "theme": "catharsis",
+  "packageName": "eu.kanade.tachiyomi.extension.es.templescanesp",
+  "name": "Aedex",
+  "versionCode": 106077,
+  "versionName": "1.6.77",
+  "extensionLib": "1.6",
+  "contentWarning": 3,
+  "sources": [
+    {
+      "id": 4334604114708629478,
+      "name": "Aedex",
+      "lang": "es",
+      "baseUrl": "https://aedexnox.com"
+    }
+  ],
+  "contentHash": ""
+}

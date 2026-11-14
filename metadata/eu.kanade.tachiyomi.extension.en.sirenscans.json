@@ -3,17 +3,17 @@
   "theme": "keyoapp",
   "packageName": "eu.kanade.tachiyomi.extension.en.sirenscans",
   "name": "Siren Scans",
-  "versionCode": 106023,
-  "versionName": "1.6.23",
+  "versionCode": 106027,
+  "versionName": "1.6.27",
   "extensionLib": "1.6",
   "contentWarning": 1,
   "sources": [
     {
       "id": 5804710058654490234,
-      "versionId": 1,
       "name": "Siren Scans",
       "lang": "en",
       "baseUrl": "https://sirenscans.com"
     }
-  ]
+  ],
+  "contentHash": ""
 }

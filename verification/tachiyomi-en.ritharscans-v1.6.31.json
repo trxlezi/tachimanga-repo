@@ -1,0 +1,28 @@
+{
+  "apk": "tachiyomi-en.ritharscans-v1.6.31.apk",
+  "sha256": "2cd70c27e158afd5b6eb0ab7f8ea07ebf24a5107adc797bbb336f7c5c27a71e7",
+  "pkg": "eu.kanade.tachiyomi.extension.en.ritharscans",
+  "version": "1.6.31",
+  "androidCode": 106031,
+  "minSdk": 21,
+  "name": "Tachiyomi: RitharScans",
+  "certificateSha256": "1547db4f735109a218a4b53bfda6625038f988391f9d3c7751cf906ea3919fe1",
+  "classCount": 1227,
+  "sourceClasses": [
+    "Leu/kanade/tachiyomi/extension/R$mipmap;",
+    "Leu/kanade/tachiyomi/extension/R;",
+    "Leu/kanade/tachiyomi/extension/en/ritharscans/PageDto$$serializer;",
+    "Leu/kanade/tachiyomi/extension/en/ritharscans/PageDto$Companion;",
+    "Leu/kanade/tachiyomi/extension/en/ritharscans/PageDto;",
+    "Leu/kanade/tachiyomi/extension/en/ritharscans/RitharScans$getLatestUpdates$1;",
+    "Leu/kanade/tachiyomi/extension/en/ritharscans/RitharScans$getPopularManga$1;",
+    "Leu/kanade/tachiyomi/extension/en/ritharscans/RitharScans;"
+  ],
+  "elementsSelectFirstReferences": 0,
+  "entryPoint": "keiyoushi.source.TachimangaEntryPoint",
+  "manifestEntryPoint": "verified",
+  "oldGeneratedClassPresent": false,
+  "dexdump": "passed",
+  "signatureVerification": "passed",
+  "limitation": "Static APK checks; iOS/OpenJ9 and live sites not tested"
+}

@@ -3,17 +3,17 @@
   "theme": "keyoapp",
   "packageName": "eu.kanade.tachiyomi.extension.en.grimscans",
   "name": "Grim Scans",
-  "versionCode": 106023,
-  "versionName": "1.6.23",
+  "versionCode": 106025,
+  "versionName": "1.6.25",
   "extensionLib": "1.6",
   "contentWarning": 1,
   "sources": [
     {
       "id": 8588684547293952127,
-      "versionId": 1,
       "name": "Grim Scans",
       "lang": "en",
       "baseUrl": "https://grimscans.com"
     }
-  ]
+  ],
+  "contentHash": ""
 }

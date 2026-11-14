@@ -3,17 +3,17 @@
   "theme": "keyoapp",
   "packageName": "eu.kanade.tachiyomi.extension.en.kewnscans",
   "name": "Kewn Scans",
-  "versionCode": 106024,
-  "versionName": "1.6.24",
+  "versionCode": 106026,
+  "versionName": "1.6.26",
   "extensionLib": "1.6",
   "contentWarning": 1,
   "sources": [
     {
       "id": 2816768640766208312,
-      "versionId": 1,
       "name": "Kewn Scans",
       "lang": "en",
       "baseUrl": "https://kewnscans.org"
     }
-  ]
+  ],
+  "contentHash": ""
 }

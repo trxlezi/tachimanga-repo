@@ -3,17 +3,17 @@
   "theme": null,
   "packageName": "eu.kanade.tachiyomi.extension.en.mangago",
   "name": "Mangago",
-  "versionCode": 106042,
-  "versionName": "1.6.42",
+  "versionCode": 106046,
+  "versionName": "1.6.46",
   "extensionLib": "1.6",
   "contentWarning": 2,
   "sources": [
     {
       "id": 2470059397662084186,
-      "versionId": 1,
       "name": "Mangago",
       "lang": "en",
       "baseUrl": "https://www.mangago.me"
     }
-  ]
+  ],
+  "contentHash": ""
 }

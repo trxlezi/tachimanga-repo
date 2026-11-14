@@ -16,7 +16,7 @@ from build_pb import build_pb
 from verify_apk import verify
 
 SOURCE = ROOT / 'extensions-source'
-BASE = 'a1a1d8ccfb31f3fa9c8cf2fab3e4f1cd67071b1f'
+BASE = '6f345a81459739e35d8fc94c05455464e856f771'
 
 
 def run(args, cwd=ROOT, **kwargs):
@@ -108,7 +108,9 @@ def main():
     official = fetch_official()
     pkg_match = re.search(r'pkgName\s*=\s*"([^"]+)"', text)
     pkg = 'eu.kanade.tachiyomi.extension.' + (pkg_match[1] if pkg_match else module.replace('/', '.'))
-    remote_code = int(official[pkg]['version'].split('.')[-1])
+    # Upstream may have dropped the source; then there is no official version to outrank.
+    upstream = official.get(pkg)
+    remote_code = int(upstream['version'].split('.')[-1]) if upstream else 0
     theme = re.search(r'theme\s*=\s*"([^"]+)"', text)
     base = 0
     if theme:
@@ -139,6 +141,7 @@ def main():
         build_jars(stale)
     build_index(offline=True)
     build_pb()
+    run(['git', 'add', '-AN', '.'], cwd=SOURCE)
     patch = subprocess.check_output(['git', 'diff', '--binary', 'HEAD'], cwd=SOURCE)
     (ROOT / 'patches/tachimanga.patch').write_bytes(patch)
     print('Ready for review and git commit/push. APKs have not been tested on iOS.')

@@ -3,17 +3,17 @@
   "theme": "keyoapp",
   "packageName": "eu.kanade.tachiyomi.extension.en.ritharscans",
   "name": "RitharScans",
-  "versionCode": 106027,
-  "versionName": "1.6.27",
+  "versionCode": 106031,
+  "versionName": "1.6.31",
   "extensionLib": "1.6",
   "contentWarning": 1,
   "sources": [
     {
       "id": 8220771912098311271,
-      "versionId": 1,
       "name": "RitharScans",
       "lang": "en",
       "baseUrl": "https://ritharscans.com"
     }
-  ]
+  ],
+  "contentHash": ""
 }
